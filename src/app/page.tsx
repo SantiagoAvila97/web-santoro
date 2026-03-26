@@ -15,6 +15,8 @@ import {
   Code2,
   Heart,
   Rocket,
+  Activity,
+  Monitor,
 } from "lucide-react";
 
 const App = () => {
@@ -32,6 +34,7 @@ const App = () => {
   const navLinks = [
     { name: "AirPods Pro 2", href: "#airpods-pro" },
     { name: "AirPods 4", href: "#airpods-4" },
+    { name: "Watch Series 10", href: "#watch-10" },
     { name: "Accesorios", href: "#accesorios" },
     { name: "Nosotros", href: "#nosotros" },
   ];
@@ -199,7 +202,7 @@ const App = () => {
         </div>
       </section>
 
-      {/* Product Highlight: AirPods Pro 2 - Responsive Flex */}
+      {/* Product Highlight: AirPods Pro 2 */}
       <section
         id="airpods-pro"
         className="py-16 md:py-24 bg-[#000] text-white overflow-hidden"
@@ -262,7 +265,7 @@ const App = () => {
         </div>
       </section>
 
-      {/* AirPods 4 - Responsive Reverse */}
+      {/* AirPods 4 */}
       <section
         id="airpods-4"
         className="py-16 md:py-24 bg-white overflow-hidden border-b border-gray-100"
@@ -313,7 +316,69 @@ const App = () => {
         </div>
       </section>
 
-      {/* Quiénes Somos - Responsive Layout */}
+      {/* NEW SECTION: Apple Watch Series 10 */}
+      <section
+        id="watch-10"
+        className="py-16 md:py-24 bg-gradient-to-b from-[#f5f5f7] to-white overflow-hidden"
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-16">
+            <span className="text-black font-semibold text-sm md:text-lg tracking-widest uppercase">
+              Apple Watch Series 10
+            </span>
+            <h2 className="text-4xl md:text-7xl font-extrabold mt-4 mb-6 tracking-tight">
+              Más delgado. <br />
+              <span className="text-gray-400">Y más brillante.</span>
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className="order-2 md:order-1 space-y-8">
+              <div className="p-8 bg-white rounded-[2.5rem] shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                <Monitor className="text-blue-500 mb-4" size={32} />
+                <h3 className="text-2xl font-bold mb-2">Pantalla OLED Ampliada</h3>
+                <p className="text-gray-500">
+                  Un área de visualización más grande en el diseño más fino jamás
+                  creado para un Watch.
+                </p>
+              </div>
+              <div className="p-8 bg-white rounded-[2.5rem] shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                <Activity className="text-red-500 mb-4" size={32} />
+                <h3 className="text-2xl font-bold mb-2">Salud de Vanguardia</h3>
+                <p className="text-gray-500">
+                  Notificaciones de apnea del sueño y seguimiento avanzado de
+                  actividad diaria.
+                </p>
+              </div>
+              <button className="w-full bg-black text-white px-10 py-5 rounded-full font-bold text-lg hover:bg-gray-800 transition-all flex items-center justify-center gap-3">
+                Explorar Series 10 <ChevronRight size={20} />
+              </button>
+            </div>
+
+            <div className="order-1 md:order-2 flex justify-center items-center relative">
+              <div className="absolute w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-blue-100/50 rounded-full blur-[80px] -z-10 animate-pulse"></div>
+              <div className="relative animate-float-delayed">
+                {/* Placeholder for Watch Image */}
+                <div className="w-[280px] h-[340px] md:w-[350px] md:h-[420px] bg-zinc-900 rounded-[3.5rem] border-[8px] border-zinc-800 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.3)] flex items-center justify-center p-2 relative overflow-hidden">
+                  <div className="w-full h-full rounded-[2.8rem] bg-gradient-to-tr from-indigo-900 via-purple-900 to-pink-900 flex flex-col items-center justify-center text-white p-6">
+                    <span className="text-xs font-bold mb-2 text-white/50">
+                      SANTORO 10:09
+                    </span>
+                    <Watch size={100} strokeWidth={1} className="text-white/80" />
+                    <div className="mt-4 flex gap-2">
+                      <div className="w-8 h-1 bg-white/20 rounded-full overflow-hidden">
+                        <div className="w-1/2 h-full bg-blue-400"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Quiénes Somos */}
       <section
         id="nosotros"
         className="py-16 md:py-24 bg-zinc-900 text-white overflow-hidden"
@@ -367,7 +432,7 @@ const App = () => {
         </div>
       </section>
 
-      {/* Essentials (Bento Grid) - Full Responsive */}
+      {/* Essentials (Bento Grid) */}
       <section id="accesorios" className="py-16 md:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="mb-10 md:mb-12 text-center md:text-left">
@@ -492,7 +557,7 @@ const App = () => {
         }
         @keyframes float-delayed {
           0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-10px); }
+          50% { transform: translateY(-15px); }
         }
         .animate-fade-in {
           animation: fade-in 0.3s ease-out forwards;
@@ -504,7 +569,7 @@ const App = () => {
           animation: float 4s ease-in-out infinite;
         }
         .animate-float-delayed {
-          animation: float-delayed 5s ease-in-out infinite;
+          animation: float-delayed 6s ease-in-out infinite;
         }
         html {
           scroll-behavior: smooth;
