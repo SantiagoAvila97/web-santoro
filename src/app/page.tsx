@@ -17,10 +17,19 @@ import {
   Rocket,
   Activity,
   Monitor,
+  Music,
+  Bluetooth,
+  Shield,
+  Volume2,
+  Waves,
+  Sparkles,
 } from "lucide-react";
 
 const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [openMobileDropdown, setOpenMobileDropdown] = useState<
+    "airspods" | "relojes" | null
+  >(null);
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -93,12 +102,65 @@ const App = () => {
     };
   }, []);
 
+  const navDropdowns = [
+    {
+      name: "AirsPods",
+      id: "airspods" as const,
+      items: [
+        { name: "Serie 4", href: "#airpods-4" },
+        { name: "Pro 2", href: "#airpods-pro" },
+        { name: "Pro 3", href: "#airpods-pro-3" },
+        { name: "Max", href: "#airpods-max" },
+      ],
+    },
+    {
+      name: "Relojes",
+      id: "relojes" as const,
+      items: [{ name: "Watch Series 10", href: "#watch-10" }],
+    },
+  ];
+
   const navLinks = [
-    { name: "AirPods Pro 2", href: "#airpods-pro" },
-    { name: "AirPods 4", href: "#airpods-4" },
-    { name: "Watch Series 10", href: "#watch-10" },
     { name: "Accesorios", href: "#accesorios" },
     { name: "Nosotros", href: "#nosotros" },
+  ];
+
+  const comparisonData = [
+    {
+      feature: "Cancelación de Ruido",
+      airpods4: "No",
+      pro2: "Activa (ANC)",
+      pro3: "ANC 2.0 Pro",
+      max: "Premium ANC",
+    },
+    {
+      feature: "Chip de Audio",
+      airpods4: "H2",
+      pro2: "H2",
+      pro3: "H3 (Nuevo)",
+      max: "H1 (Dual)",
+    },
+    {
+      feature: "Autonomía (Caja)",
+      airpods4: "30 hrs",
+      pro2: "30 hrs",
+      pro3: "36 hrs",
+      max: "20 hrs",
+    },
+    {
+      feature: "Audio Espacial",
+      airpods4: "Personalizado",
+      pro2: "Personalizado",
+      pro3: "Dinámico 360°",
+      max: "Cinematográfico",
+    },
+    {
+      feature: "Resistencia IP",
+      airpods4: "IP54",
+      pro2: "IP54",
+      pro3: "IPX8 (Total)",
+      max: "N/A",
+    },
   ];
 
   return (
@@ -121,7 +183,58 @@ const App = () => {
           </div>
 
           {/* Desktop Links */}
-          <div className="hidden md:flex space-x-8 text-sm font-medium">
+          <div className="hidden md:flex items-center space-x-8 text-sm font-medium">
+            {navDropdowns.map((group) => (
+              <div
+                key={group.name}
+                className="relative group"
+                tabIndex={0}
+                onMouseEnter={(e) => {
+                  const dropdown = e.currentTarget.querySelector(".dropdown-menu");
+                  if (dropdown) dropdown.classList.add("show");
+                }}
+                onMouseLeave={(e) => {
+                  const dropdown = e.currentTarget.querySelector(".dropdown-menu");
+                  if (dropdown) dropdown.classList.remove("show");
+                }}
+              >
+                <button
+                  className="flex items-center gap-1 hover:text-blue-600 transition-colors cursor-pointer focus:outline-none"
+                  style={{ cursor: "pointer" }}
+                  tabIndex={-1}
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  {group.name}
+                  <ChevronRight
+                    size={14}
+                    className="rotate-90 group-hover:translate-y-[1px] transition-transform"
+                  />
+                </button>
+                <div
+                  className="dropdown-menu pointer-events-none opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200 absolute left-0 top-8 w-44 rounded-xl border border-gray-100 bg-white shadow-xl p-2 z-50"
+                  style={{ pointerEvents: "auto" }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.classList.add("show");
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.classList.remove("show");
+                  }}
+                >
+                  {group.items.map((item) => (
+                    <a
+                      key={item.name}
+                      href={item.href}
+                      className="block rounded-lg px-3 py-2 text-sm hover:bg-gray-50 hover:text-blue-600 transition-colors cursor-pointer"
+                      style={{ cursor: "pointer" }}
+                    >
+                      {item.name}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            ))}
+
             {navLinks.map((link) => (
               <a
                 key={link.name}
@@ -150,11 +263,52 @@ const App = () => {
         {isMenuOpen && (
           <div className="md:hidden bg-white border-b border-gray-100 absolute w-full left-0 animate-fade-in">
             <div className="flex flex-col p-6 space-y-4">
+              {navDropdowns.map((group) => (
+                <div key={group.name} className="border-b border-gray-50 pb-2">
+                  <button
+                    onClick={() =>
+                      setOpenMobileDropdown((prev) =>
+                        prev === group.id ? null : group.id,
+                      )
+                    }
+                    className="w-full flex items-center justify-between text-lg font-medium py-1"
+                  >
+                    {group.name}
+                    <ChevronRight
+                      size={18}
+                      className={`transition-transform ${
+                        openMobileDropdown === group.id ? "rotate-90" : ""
+                      }`}
+                    />
+                  </button>
+                  {openMobileDropdown === group.id && (
+                    <div className="mt-2 pl-3 flex flex-col gap-2">
+                      {group.items.map((item) => (
+                        <a
+                          key={item.name}
+                          href={item.href}
+                          onClick={() => {
+                            setIsMenuOpen(false);
+                            setOpenMobileDropdown(null);
+                          }}
+                          className="text-base text-gray-700 py-1"
+                        >
+                          {item.name}
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+
               {navLinks.map((link) => (
                 <a
                   key={link.name}
                   href={link.href}
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    setOpenMobileDropdown(null);
+                  }}
                   className="text-lg font-medium border-b border-gray-50 pb-2"
                 >
                   {link.name}
@@ -384,6 +538,325 @@ const App = () => {
         </div>
       </section>
 
+      {/* NUEVA SECCIÓN: AirPods Pro 3 (EXCLUSIVOS) */}
+      <section
+        id="airpods-pro-3"
+        className="py-16 md:py-32 bg-black text-white overflow-hidden"
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row items-center gap-10 md:gap-20">
+          <div className="w-full md:flex-1">
+            <div className="relative group max-w-sm mx-auto md:max-w-none">
+              <div className="absolute inset-0 bg-blue-500/10 blur-[120px] rounded-full"></div>
+              <div className="relative bg-gradient-to-b from-neutral-900 to-black p-10 md:p-20 rounded-[3rem] border border-neutral-800 flex items-center justify-center">
+                <div className="relative">
+                  <Headphones
+                    size={150}
+                    strokeWidth={1}
+                    className="text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.2)] md:w-[220px]"
+                  />
+                  <div className="absolute -top-4 -right-4 bg-blue-600 p-2 rounded-full animate-pulse shadow-[0_0_15px_rgba(37,99,235,0.5)]">
+                    <Sparkles size={20} className="text-white" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="w-full md:flex-1 text-center md:text-left">
+            <span className="inline-block px-4 py-1 rounded-full border border-blue-500 text-blue-400 font-bold text-xs md:text-sm tracking-widest uppercase mb-6">
+              Lanzamiento Exclusivo
+            </span>
+            <h2 className="text-4xl md:text-7xl font-bold mb-6 text-white leading-tight">
+              AirPods Pro 3. <br />
+              Silencio maestro.
+            </h2>
+            <p className="text-lg md:text-2xl text-neutral-400 mb-10 max-w-lg mx-auto md:mx-0">
+              Cancelación de ruido 2.0 y chip H3 para una fidelidad que no habías
+              escuchado antes en Colombia.
+            </p>
+            <div className="grid grid-cols-2 gap-6 mb-12 max-w-sm mx-auto md:mx-0">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-neutral-800 rounded-lg">
+                  <Waves size={20} className="text-blue-500" />
+                </div>
+                <span className="text-sm font-medium">ANC Inteligente</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-neutral-800 rounded-lg">
+                  <Zap size={20} className="text-yellow-500" />
+                </div>
+                <span className="text-sm font-medium">Carga Ultra</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-neutral-800 rounded-lg">
+                  <Shield size={20} className="text-green-500" />
+                </div>
+                <span className="text-sm font-medium">Garantía Apple</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-neutral-800 rounded-lg">
+                  <Volume2 size={20} className="text-purple-500" />
+                </div>
+                <span className="text-sm font-medium">Lossless Audio</span>
+              </div>
+            </div>
+            <button className="w-full sm:w-auto bg-white text-black px-12 py-5 rounded-full font-black text-lg hover:bg-neutral-200 transition-all transform hover:scale-105 shadow-[0_0_20px_rgba(255,255,255,0.1)]">
+              Reservar AirPods Pro 3
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* NUEVA SECCIÓN: Diademas Magnético Pro Max */}
+      <section
+        id="airpods-max"
+        className="py-16 md:py-28 bg-gray-50 overflow-hidden"
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-16">
+            <span className="text-blue-600 font-bold tracking-[0.2em] uppercase text-sm mb-4 block">
+              La máxima expresión del sonido
+            </span>
+            <h2 className="text-5xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-b from-gray-400 to-black uppercase tracking-tighter">
+              Magnético Pro Max
+            </h2>
+            <p className="text-gray-500 text-lg md:text-xl mt-4 font-medium max-w-2xl mx-auto">
+              Un diseño circumaural completamente reimaginado. El equilibrio perfecto
+              entre sonido de alta fidelidad y la magia de los AirPods.
+            </p>
+          </div>
+
+          <div className="flex flex-col md:flex-row items-center gap-12 lg:gap-24">
+            <div className="w-full md:w-1/2 order-2 md:order-1">
+              <div className="space-y-8">
+                <div className="flex gap-6 items-start p-6 bg-white rounded-[2rem] shadow-sm border border-gray-100 transition-hover hover:shadow-md">
+                  <div className="bg-black text-white p-4 rounded-2xl">
+                    <Music size={28} />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-black">Malla Acústica</h3>
+                    <p className="text-gray-600">
+                      Tejido de punto diseñado a medida para distribuir el peso y
+                      reducir la presión.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex gap-6 items-start p-6 bg-white rounded-[2rem] shadow-sm border border-gray-100 transition-hover hover:shadow-md">
+                  <div className="bg-blue-600 text-white p-4 rounded-2xl">
+                    <Bluetooth size={28} />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-black">
+                      Acople Magnético
+                    </h3>
+                    <p className="text-gray-600">
+                      Almohadillas de espuma viscoelástica con diseño acústico que se
+                      ajustan por magnetismo.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="p-8 bg-white rounded-[2.5rem] border border-gray-100 shadow-sm">
+                  <div className="flex justify-between items-center mb-6">
+                    <span className="text-sm font-bold text-gray-400 uppercase tracking-widest">
+                      Colores de Temporada
+                    </span>
+                    <span className="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
+                      Disponibles
+                    </span>
+                  </div>
+                  <div className="flex gap-5">
+                    <div className="group flex flex-col items-center gap-2">
+                      <div className="w-10 h-10 rounded-full bg-neutral-800 border-2 border-white shadow-lg cursor-pointer hover:scale-110 transition-transform"></div>
+                      <span className="text-[10px] font-bold text-gray-400 uppercase">
+                        Espacial
+                      </span>
+                    </div>
+                    <div className="group flex flex-col items-center gap-2">
+                      <div className="w-10 h-10 rounded-full bg-gray-200 border-2 border-white shadow-lg cursor-pointer hover:scale-110 transition-transform"></div>
+                      <span className="text-[10px] font-bold text-gray-400 uppercase">
+                        Plata
+                      </span>
+                    </div>
+                    <div className="group flex flex-col items-center gap-2">
+                      <div className="w-10 h-10 rounded-full bg-blue-200 border-2 border-white shadow-lg cursor-pointer hover:scale-110 transition-transform"></div>
+                      <span className="text-[10px] font-bold text-gray-400 uppercase">
+                        Cielo
+                      </span>
+                    </div>
+                    <div className="group flex flex-col items-center gap-2">
+                      <div className="w-10 h-10 rounded-full bg-green-100 border-2 border-white shadow-lg cursor-pointer hover:scale-110 transition-transform"></div>
+                      <span className="text-[10px] font-bold text-gray-400 uppercase">
+                        Menta
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="w-full md:w-1/2 order-1 md:order-2">
+              <div className="relative group">
+                {/* Representación visual artística de los auriculares de diadema */}
+                <div className="aspect-square bg-gradient-to-tr from-gray-200 to-gray-50 rounded-[3rem] flex items-center justify-center p-12 relative overflow-hidden shadow-inner">
+                  <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-400 via-transparent to-transparent"></div>
+                  <div className="flex gap-8 items-center scale-110 md:scale-125 lg:scale-150 transition-transform group-hover:scale-125 md:group-hover:scale-140 lg:group-hover:scale-160 duration-700">
+                    <div className="w-14 h-36 bg-neutral-900 rounded-[2rem] shadow-2xl border-r border-neutral-700"></div>
+                    <div className="w-24 h-1.5 bg-neutral-400 rounded-full shadow-sm"></div>
+                    <div className="w-14 h-36 bg-neutral-900 rounded-[2rem] shadow-2xl border-l border-neutral-700"></div>
+                  </div>
+                </div>
+                {/* Badge de Precio o Acción */}
+                <div className="absolute -bottom-6 -right-6 bg-white p-6 rounded-[2rem] shadow-2xl border border-gray-100 -rotate-2 flex flex-col items-center">
+                  <span className="block text-blue-600 text-[10px] font-black uppercase tracking-tighter mb-1">
+                    Oferta Bogotá
+                  </span>
+                  <span className="text-3xl font-black text-black leading-none">
+                    $2.499k
+                  </span>
+                  <span className="text-[10px] text-gray-400 font-bold mt-1">
+                    Envío Hoy
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-24 text-center">
+            <div className="inline-flex flex-col items-center">
+              <button className="bg-black text-white px-20 py-6 rounded-[2rem] font-bold hover:bg-neutral-800 transition-all text-xl shadow-2xl flex items-center gap-4 group">
+                Comprar Magnético Pro Max
+                <div className="bg-blue-600 rounded-full p-1 group-hover:rotate-12 transition-transform">
+                  <Zap size={18} className="fill-white text-white" />
+                </div>
+              </button>
+              <p className="mt-4 text-gray-400 text-sm font-medium italic">
+                Disponibilidad inmediata en tienda física y online.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* NUEVA SECCIÓN: Cuadro Comparativo */}
+      <section className="py-20 bg-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-5xl font-bold text-black mb-4">
+              Compara los modelos
+            </h2>
+            <p className="text-gray-500">
+              Encuentra los AirPods perfectos para tu estilo de vida en Colombia.
+            </p>
+          </div>
+
+          <div className="overflow-x-auto rounded-3xl border border-gray-100 shadow-2xl">
+            <table className="w-full text-left border-collapse bg-white">
+              <thead>
+                <tr className="bg-gray-50">
+                  <th className="p-6 text-sm font-bold text-gray-400 uppercase tracking-widest">
+                    Característica
+                  </th>
+                  <th className="p-6 text-xl font-bold text-black">AirPods 4</th>
+                  <th className="p-6 text-xl font-bold text-black">Pro 2</th>
+                  <th className="p-6 text-xl font-bold text-blue-600">Pro 3 👑</th>
+                  <th className="p-6 text-xl font-bold text-black">Max</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-50">
+                {comparisonData.map((row, idx) => (
+                  <tr key={idx} className="hover:bg-gray-50/50 transition-colors">
+                    <td className="p-6 font-bold text-gray-900">{row.feature}</td>
+                    <td className="p-6 text-gray-600">{row.airpods4}</td>
+                    <td className="p-6 text-gray-600 font-medium">{row.pro2}</td>
+                    <td className="p-6 text-blue-700 font-bold">{row.pro3}</td>
+                    <td className="p-6 text-gray-600">{row.max}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            <div className="p-6 rounded-2xl bg-gray-50">
+              <Shield className="mx-auto mb-4 text-green-500" size={32} />
+              <h4 className="font-bold mb-2">Garantía Local</h4>
+              <p className="text-sm text-gray-500">
+                Soporte directo en Bogotá y principales ciudades.
+              </p>
+            </div>
+            <div className="p-6 rounded-2xl bg-gray-50">
+              <Zap className="mx-auto mb-4 text-yellow-500" size={32} />
+              <h4 className="font-bold mb-2">Envío Express</h4>
+              <p className="text-sm text-gray-500">
+                Recibe tus AirPods el mismo día en tu domicilio.
+              </p>
+            </div>
+            <div className="p-6 rounded-2xl bg-gray-50">
+              <Sparkles className="mx-auto mb-4 text-blue-500" size={32} />
+              <h4 className="font-bold mb-2">Original 100%</h4>
+              <p className="text-sm text-gray-500">
+                Productos sellados con serial verificable.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Quiénes Somos */}
+      <section
+        id="nosotros"
+        className="py-16 md:py-24 bg-zinc-900 text-white overflow-hidden"
+      >
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-800 rounded-full mb-6 md:mb-8">
+            <Code2 size={16} className="text-blue-400" />
+            <span className="text-[10px] font-bold uppercase tracking-widest">
+              SANTORO: Nuestra esencia
+            </span>
+          </div>
+          <h2 className="text-3xl md:text-6xl font-extrabold mb-6 md:mb-8 leading-tight">
+            Ingenieros con <br />
+            <span className="bg-gradient-to-r from-blue-400 to-indigo-500 bg-clip-text text-transparent">
+              Amor por la Tecnología.
+            </span>
+          </h2>
+          <p className="text-base md:text-xl text-zinc-400 leading-relaxed mb-10 md:mb-12">
+            Nacimos como desarrolladores de software con una obsesión: buscar lo
+            mejor en AirPods y Apple Watch para Colombia. En SANTORO curamos
+            experiencias tecnológicas que nosotros mismos usaríamos.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 text-left">
+            {[
+              {
+                icon: <Heart className="text-red-400" />,
+                title: "Pasión Pura",
+                desc: "Amamos cada línea de código y cada circuito bien diseñado.",
+              },
+              {
+                icon: <Rocket className="text-blue-400" />,
+                title: "Visión 1.1",
+                desc: "Solo traemos productos premium que superan nuestros estándares.",
+              },
+              {
+                icon: <ShieldCheck className="text-green-400" />,
+                title: "Compromiso Real",
+                desc: "Elevando el estilo de vida digital en Colombia.",
+              },
+            ].map((card, i) => (
+              <div
+                key={i}
+                className="p-6 md:p-8 bg-zinc-800/50 rounded-2xl md:rounded-3xl border border-zinc-700/50 hover:bg-zinc-800 transition-colors"
+              >
+                <div className="mb-4">{card.icon}</div>
+                <h4 className="text-lg md:text-xl font-bold mb-2">{card.title}</h4>
+                <p className="text-zinc-500 text-xs md:text-sm">{card.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* NEW SECTION: Apple Watch Series 10 */}
       <section
         id="watch-10"
@@ -441,60 +914,6 @@ const App = () => {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Quiénes Somos */}
-      <section
-        id="nosotros"
-        className="py-16 md:py-24 bg-zinc-900 text-white overflow-hidden"
-      >
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-800 rounded-full mb-6 md:mb-8">
-            <Code2 size={16} className="text-blue-400" />
-            <span className="text-[10px] font-bold uppercase tracking-widest">
-              SANTORO: Nuestra esencia
-            </span>
-          </div>
-          <h2 className="text-3xl md:text-6xl font-extrabold mb-6 md:mb-8 leading-tight">
-            Ingenieros con <br />
-            <span className="bg-gradient-to-r from-blue-400 to-indigo-500 bg-clip-text text-transparent">
-              Amor por la Tecnología.
-            </span>
-          </h2>
-          <p className="text-base md:text-xl text-zinc-400 leading-relaxed mb-10 md:mb-12">
-            Nacimos como desarrolladores de software con una obsesión: buscar lo
-            mejor en AirPods y Apple Watch para Colombia. En SANTORO curamos
-            experiencias tecnológicas que nosotros mismos usaríamos.
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 text-left">
-            {[
-              {
-                icon: <Heart className="text-red-400" />,
-                title: "Pasión Pura",
-                desc: "Amamos cada línea de código y cada circuito bien diseñado.",
-              },
-              {
-                icon: <Rocket className="text-blue-400" />,
-                title: "Visión 1.1",
-                desc: "Solo traemos productos premium que superan nuestros estándares.",
-              },
-              {
-                icon: <ShieldCheck className="text-green-400" />,
-                title: "Compromiso Real",
-                desc: "Elevando el estilo de vida digital en Colombia.",
-              },
-            ].map((card, i) => (
-              <div
-                key={i}
-                className="p-6 md:p-8 bg-zinc-800/50 rounded-2xl md:rounded-3xl border border-zinc-700/50 hover:bg-zinc-800 transition-colors"
-              >
-                <div className="mb-4">{card.icon}</div>
-                <h4 className="text-lg md:text-xl font-bold mb-2">{card.title}</h4>
-                <p className="text-zinc-500 text-xs md:text-sm">{card.desc}</p>
-              </div>
-            ))}
           </div>
         </div>
       </section>
