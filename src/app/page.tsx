@@ -24,6 +24,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { BenefitHotspot } from "./functions/benefit";
+import { redirectToWhatsapp } from "./functions/whatsapp";
 
 const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -254,8 +255,11 @@ const App = () => {
           </div>
 
           <div className="flex items-center gap-2 md:gap-4">
-            <button className="hidden sm:block bg-black text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-gray-800 transition-all active:scale-95 shadow-lg shadow-gray-200">
-              Comprar Ahora
+            <button
+              onClick={() => redirectToWhatsapp("Sin selección", "$0")}
+              className="cursor-pointer hidden sm:block bg-black text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-gray-800 transition-all active:scale-95 shadow-lg shadow-gray-200"
+            >
+              WhatsApp
             </button>
             <button
               className="p-2 md:hidden"
@@ -321,8 +325,11 @@ const App = () => {
                   {link.name}
                 </a>
               ))}
-              <button className="bg-black text-white w-full py-4 rounded-2xl font-bold">
-                Comprar Ahora
+              <button
+                onClick={() => redirectToWhatsapp("Sin selección", "$0")}
+                className="bg-black text-white w-full py-4 rounded-2xl font-bold"
+              >
+                WhatsApp
               </button>
             </div>
           </div>
@@ -381,21 +388,23 @@ const App = () => {
               2, AirPods 4 y Apple Watch en Colombia.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start px-4 sm:px-0">
-              <button className="bg-black text-white px-8 py-4 rounded-full font-bold flex items-center justify-center gap-2 group hover:gap-4 transition-all">
-                Ver Colección <ChevronRight size={20} />
-              </button>
-              <button className="border-2 border-gray-200 px-8 py-4 rounded-full font-bold hover:bg-gray-50 transition-all">
-                Saber más
-              </button>
+              <a
+                href="#nosotros"
+                className="cursor-pointer bg-black text-white px-8 py-4 rounded-full font-bold flex items-center justify-center gap-2 group hover:gap-4 transition-all"
+              >
+                Quienes somos <ChevronRight size={20} />
+              </a>
             </div>
           </div>
           <div className="relative mt-12 md:mt-0">
-            <img
-              src="/firma.png"
-              alt="AirPods y Watch"
-              className="object-contain w-full h-full select-none pointer-events-none"
-              draggable="false"
-            />
+            <div className="relative w-full h-full">
+              <img
+                src="/firma.png"
+                alt="AirPods y Watch"
+                className="object-contain w-full h-full select-none pointer-events-none animate-watch-bounce"
+                draggable="false"
+              />
+            </div>
 
             <svg
               viewBox="0 0 200 200"
@@ -494,8 +503,18 @@ const App = () => {
                 <span className="text-sm font-medium">Lossless Audio</span>
               </div>
             </div>
-            <button className="w-full sm:w-auto bg-white text-black px-12 py-5 rounded-full font-black text-lg hover:bg-neutral-200 transition-all transform hover:scale-105 shadow-[0_0_20px_rgba(255,255,255,0.1)]">
-              Reservar AirPods Pro 3
+            <div className="mb-2">
+              <span className="inline-block bg-green-100 text-green-800 font-bold px-4 py-1 rounded-full text-base md:text-lg">
+                $150.000 COP
+              </span>
+            </div>
+            <button
+              onClick={() => {
+                redirectToWhatsapp("AirPods Pro 3", "$150.000 COP");
+              }}
+              className="cursor-pointer w-full sm:w-auto bg-white text-black px-12 py-5 rounded-full font-black text-lg hover:bg-neutral-200 transition-all transform hover:scale-105 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
+            >
+              Comprar AirPods Pro 3
             </button>
           </div>
         </div>
@@ -636,7 +655,17 @@ const App = () => {
 
           <div className="mt-15 text-center">
             <div className="inline-flex flex-col items-center">
-              <button className="bg-black text-white px-20 py-6 rounded-[2rem] font-bold hover:bg-neutral-800 transition-all text-xl shadow-2xl flex items-center gap-4 group">
+              <div className="mb-2">
+                <span className="inline-block bg-green-100 text-green-800 font-bold px-4 py-1 rounded-full text-base md:text-lg">
+                  $160.000 COP
+                </span>
+              </div>
+              <button
+                onClick={() => {
+                  redirectToWhatsapp("Magnético Pro Max", "$160.000 COP");
+                }}
+                className="cursor-pointer bg-black text-white px-20 py-6 rounded-[2rem] font-bold hover:bg-neutral-800 transition-all text-xl shadow-2xl flex items-center gap-4 group transform hover:scale-105"
+              >
                 Comprar Magnético Pro Max
                 <div className="bg-blue-600 rounded-full p-1 group-hover:rotate-12 transition-transform">
                   <Zap size={18} className="fill-white text-white" />
@@ -758,8 +787,18 @@ const App = () => {
                 </div>
               </li>
             </ul>
-            <button className="mt-8 md:mt-10 w-full sm:w-auto bg-white text-black px-10 py-4 rounded-full font-bold hover:bg-zinc-200 transition-all active:scale-95">
-              Lo quiero ahora
+            <div className="mt-15">
+              <span className="inline-block bg-green-100 text-green-800 font-bold px-4 py-1 rounded-full text-base md:text-lg">
+                $100.000 COP
+              </span>
+            </div>
+            <button
+              onClick={() => {
+                redirectToWhatsapp("AirPods Pro 2", "$100.000 COP");
+              }}
+              className="cursor-pointer mt-8 md:mt-2 w-full sm:w-auto bg-white text-black px-10 py-4 rounded-full font-bold hover:bg-zinc-200 transition-all active:scale-95 transform hover:scale-105"
+            >
+              Comprar AirPods Pro 2
             </button>
           </div>
         </div>
@@ -817,7 +856,17 @@ const App = () => {
                 </span>
               </div>
             </div>
-            <button className="w-full sm:w-auto bg-black text-white px-10 py-4 rounded-full font-bold hover:opacity-80 transition-all shadow-lg">
+            <div className="mb-3 mt-15">
+              <span className="inline-block bg-green-100 text-green-800 font-bold px-4 py-1 rounded-full text-base md:text-lg">
+                $120.000 COP
+              </span>
+            </div>
+            <button
+              onClick={() => {
+                redirectToWhatsapp("AirPods 4", "$120.000 COP");
+              }}
+              className="cursor-pointer w-full sm:w-auto bg-black text-white px-10 py-4 rounded-full font-bold hover:opacity-80 transition-all shadow-lg transform hover:scale-105"
+            >
               Comprar AirPods 4
             </button>
           </div>
@@ -982,8 +1031,13 @@ const App = () => {
                   actividad diaria.
                 </p>
               </div>
-              <button className="w-full bg-black text-white px-10 py-5 rounded-full font-bold text-lg hover:bg-gray-800 transition-all flex items-center justify-center gap-3">
-                Explorar Series 10 <ChevronRight size={20} />
+              <div className="mb-3">
+                <span className="inline-block bg-green-100 text-green-800 font-bold px-4 py-1 rounded-full text-base md:text-lg">
+                  $160.000 COP
+                </span>
+              </div>
+              <button className="cursor-pointer w-full bg-black text-white px-10 py-5 rounded-full font-bold text-lg hover:bg-gray-800 transition-all flex items-center justify-center gap-3 transform hover:scale-105">
+                Comprar Watch 10 <ChevronRight size={20} />
               </button>
             </div>
 
@@ -1042,9 +1096,10 @@ const App = () => {
                     Alineación magnética perfecta para tu iPhone en Bogotá.
                   </p>
                 </div>
-                <button className="mt-8 bg-white text-black font-bold py-3 px-8 rounded-full w-full sm:w-fit hover:bg-blue-500 hover:text-white transition-all">
+
+                {/* <button className="mt-8 bg-white text-black font-bold py-3 px-8 rounded-full w-full sm:w-fit hover:bg-blue-500 hover:text-white transition-all">
                   Comprar
-                </button>
+                </button> */}
               </div>
               <Zap
                 size={200}
@@ -1052,7 +1107,7 @@ const App = () => {
               />
             </div>
 
-            <div className="bg-zinc-100 rounded-[2rem] md:rounded-[2.5rem] p-8 md:p-10 flex flex-col justify-between group hover:bg-zinc-200 transition-colors border border-gray-100 shadow-sm">
+            <div className="bg-zinc-100 rounded-[2rem] md:rounded-[2.5rem] p-8 md:p-10 flex flex-col justify-between group transition-colors border border-gray-100 shadow-sm">
               <div>
                 <div className="w-12 h-12 md:w-16 md:h-16 bg-white rounded-xl md:rounded-2xl flex items-center justify-center mb-6 shadow-sm">
                   <Battery
@@ -1068,9 +1123,9 @@ const App = () => {
                   Carga rápida estándar en Colombia. 0 a 50% en 30 min.
                 </p>
               </div>
-              <button className="text-black font-bold flex items-center gap-2 group-hover:gap-4 transition-all mt-6 text-sm">
+              {/* <button className="text-black font-bold flex items-center gap-2 group-hover:gap-4 transition-all mt-6 text-sm">
                 Lo necesito <ChevronRight size={18} />
-              </button>
+              </button> */}
             </div>
 
             <div className="sm:col-span-2 md:col-span-3 bg-[#f5f5f7] rounded-[2rem] md:rounded-[2.5rem] p-8 md:p-10 border border-gray-200 flex flex-col md:flex-row items-center gap-8 group">
