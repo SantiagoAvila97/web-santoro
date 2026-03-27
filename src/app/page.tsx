@@ -28,7 +28,7 @@ import {
 const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openMobileDropdown, setOpenMobileDropdown] = useState<
-    "airspods" | "relojes" | null
+    "airpods" | "relojes" | null
   >(null);
   const [scrolled, setScrolled] = useState(false);
 
@@ -104,8 +104,8 @@ const App = () => {
 
   const navDropdowns = [
     {
-      name: "AirsPods",
-      id: "airspods" as const,
+      name: "AirPods",
+      id: "airpods" as const,
       items: [
         { name: "Serie 4", href: "#airpods-4" },
         { name: "Pro 2", href: "#airpods-pro" },
