@@ -322,6 +322,18 @@ const App = () => {
         )}
       </nav>
 
+      {/* Video Home - Full width, loop, responsive */}
+      <div className="w-full h-screen overflow-hidden">
+        <video
+          className="w-full h-full object-cover object-center"
+          src="/video-home.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+        />
+      </div>
+
       {/* Hero Section */}
       <section className="relative pt-28 md:pt-44 pb-16 md:pb-32 overflow-hidden px-4">
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-8 md:gap-12 items-center">
