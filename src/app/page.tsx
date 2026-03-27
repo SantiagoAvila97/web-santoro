@@ -8,8 +8,6 @@ import {
   ChevronRight,
   ShieldCheck,
   Zap,
-  Headphones,
-  Watch,
   CheckCircle2,
   Battery,
   Smartphone,
@@ -25,6 +23,7 @@ import {
   Waves,
   Sparkles,
 } from "lucide-react";
+import { BenefitHotspot } from "./functions/benefit";
 
 const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -392,7 +391,7 @@ const App = () => {
           </div>
           <div className="relative mt-12 md:mt-0">
             <img
-              src="/airpods-watch.png"
+              src="/firma.png"
               alt="AirPods y Watch"
               className="object-contain w-full h-full select-none pointer-events-none"
               draggable="false"
@@ -426,12 +425,27 @@ const App = () => {
                 <div className="relative">
                   <div className="order-1 md:order-2 flex justify-center items-center relative">
                     <div className="absolute w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-blue-100/50 rounded-full blur-[80px] -z-10 animate-pulse"></div>
-                    <img
-                      src="/airpods-3.png"
-                      alt="AirPods y Watch"
-                      className="object-contain w-full h-full select-none pointer-events-none animate-watch-bounce"
-                      draggable="false"
-                    />
+                    <div className="relative w-full h-full">
+                      <img
+                        src="/airpods-3.png"
+                        alt="AirPods y Watch"
+                        className="object-contain w-full h-full select-none pointer-events-none animate-watch-bounce"
+                        draggable="false"
+                      />
+                      {/* Hotspots */}
+                      <BenefitHotspot
+                        style={{ top: "30%", left: "25%" }}
+                        text="Cancelación de ruido 2.0 🎶"
+                      />
+                      <BenefitHotspot
+                        style={{ top: "55%", left: "61%" }}
+                        text="Chip H3 de última generación 🌎"
+                      />
+                      <BenefitHotspot
+                        style={{ top: "35%", left: "80%" }}
+                        text="Audio Lossless Pro 🔇"
+                      />
+                    </div>
                   </div>
                   <div className="absolute -top-4 -right-4 bg-blue-600 p-2 rounded-full animate-pulse shadow-[0_0_15px_rgba(37,99,235,0.5)]">
                     <Sparkles size={20} className="text-white" />
@@ -581,12 +595,28 @@ const App = () => {
                 {/* Representación visual artística de los auriculares de diadema */}
                 <div className="order-1 md:order-2 flex justify-center items-center relative">
                   <div className="absolute w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-blue-100/50 rounded-full blur-[80px] -z-10 animate-pulse"></div>
-                  <img
-                    src="/diaema.png"
-                    alt="AirPods y Watch"
-                    className="object-contain w-full h-full select-none pointer-events-none animate-watch-bounce"
-                    draggable="false"
-                  />
+
+                  <div className="relative w-full h-full">
+                    <img
+                      src="/diaema.png"
+                      alt="AirPods y Watch"
+                      className="object-contain w-full h-full select-none pointer-events-none animate-watch-bounce"
+                      draggable="false"
+                    />
+                    {/* Hotspots */}
+                    <BenefitHotspot
+                      style={{ top: "50%", left: "25%" }}
+                      text="Sonido envolvente 360° 🔥"
+                    />
+                    <BenefitHotspot
+                      style={{ top: "65%", left: "61%" }}
+                      text="Batería de larga duración 🔋"
+                    />
+                    <BenefitHotspot
+                      style={{ top: "15%", left: "50%" }}
+                      text="Diseño premium y cómodo 🎶"
+                    />
+                  </div>
                 </div>
                 {/* Badge de Precio o Acción */}
                 <div className="absolute -bottom-0 -right-6 bg-white p-6 rounded-[2rem] shadow-2xl border border-gray-100 -rotate-2 flex flex-col items-center">
@@ -674,12 +704,23 @@ const App = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row items-center gap-10 md:gap-16">
           <div className="w-full md:flex-1 order-2 md:order-1">
             <div className="w-full md:flex-1">
-              <img
-                src="/airpods-2.png"
-                alt="AirPods y Watch"
-                className="object-contain w-full h-full select-none pointer-events-none animate-watch-bounce"
-                draggable="false"
-              />
+              <div className="relative w-full h-full">
+                <img
+                  src="/airpods-2.png"
+                  alt="AirPods y Watch"
+                  className="object-contain w-full h-full select-none pointer-events-none animate-watch-bounce"
+                  draggable="false"
+                />
+                {/* Hotspots */}
+                <BenefitHotspot
+                  style={{ top: "50%", left: "25%" }}
+                  text="Cancelación de ruido inteligente 🔇"
+                />
+                <BenefitHotspot
+                  style={{ top: "55%", left: "61%" }}
+                  text="Modo transparencia adaptativo 🌎"
+                />
+              </div>
             </div>
           </div>
           <div className="w-full md:flex-1 order-1 md:order-2 text-center md:text-left">
@@ -731,12 +772,23 @@ const App = () => {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row-reverse items-center gap-10 md:gap-16">
           <div className="w-full md:flex-1">
-            <img
-              src="/serie-4.png"
-              alt="AirPods y Watch"
-              className="object-contain w-full h-full select-none pointer-events-none animate-watch-bounce"
-              draggable="false"
-            />
+            <div className="relative w-full h-full">
+              <img
+                src="/serie-4.png"
+                alt="AirPods y Watch"
+                className="object-contain w-full h-full select-none pointer-events-none animate-watch-bounce"
+                draggable="false"
+              />
+              {/* Hotspots */}
+              <BenefitHotspot
+                style={{ top: "15%", left: "47%" }}
+                text="Audio espacial mejorado 🔇"
+              />
+              <BenefitHotspot
+                style={{ top: "70%", left: "47%" }}
+                text="Conexión rápida y estable ⚡"
+              />
+            </div>
           </div>
           <div className="w-full md:flex-1 text-center md:text-left">
             <span className="text-gray-400 font-semibold text-sm md:text-lg tracking-wider uppercase">
@@ -937,12 +989,28 @@ const App = () => {
 
             <div className="order-1 md:order-2 flex justify-center items-center relative">
               <div className="absolute w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-blue-100/50 rounded-full blur-[80px] -z-10 animate-pulse"></div>
-              <img
-                src="/watch.png"
-                alt="AirPods y Watch"
-                className="object-contain w-full h-full select-none pointer-events-none animate-watch-bounce"
-                draggable="false"
-              />
+
+              <div className="relative w-full h-full">
+                <img
+                  src="/watch.png"
+                  alt="AirPods y Watch"
+                  className="object-contain w-full h-full select-none pointer-events-none animate-watch-bounce"
+                  draggable="false"
+                />
+                {/* Hotspots */}
+                <BenefitHotspot
+                  style={{ top: "10%", left: "47%" }}
+                  text="Monitoreo avanzado de salud ❤️"
+                />
+                <BenefitHotspot
+                  style={{ top: "30%", left: "75%" }}
+                  text="Pantalla más grande y brillante 🔋"
+                />
+                <BenefitHotspot
+                  style={{ top: "70%", left: "47%" }}
+                  text="Notificaciones en tiempo real 📲"
+                />
+              </div>
             </div>
           </div>
         </div>
