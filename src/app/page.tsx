@@ -323,14 +323,21 @@ const App = () => {
       </nav>
 
       {/* Video Home - Full width, loop, responsive */}
-      <div className="w-full h-[100dvh] overflow-hidden relative">
+      <div className="w-full h-[100dvh] md:h-screen overflow-hidden relative">
         <video
-          className="absolute top-1/2 left-1/2
+          className="
+      absolute top-1/2 left-1/2
       min-w-[100dvh] min-h-[100vw]
       -translate-x-1/2 -translate-y-1/2
-      -rotate-90 md:rotate-0
+      -rotate-90
+
+      md:static md:translate-x-0 md:translate-y-0
+      md:rotate-0
       md:w-full md:h-full
-      object-cover"
+      md:min-w-0 md:min-h-0
+
+      object-cover
+    "
           src="/video-home.mp4"
           autoPlay
           loop
@@ -338,7 +345,6 @@ const App = () => {
           playsInline
         />
       </div>
-
       {/* Hero Section */}
       <section className="relative pt-28 md:pt-44 pb-16 md:pb-32 overflow-hidden px-4">
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-8 md:gap-12 items-center">
