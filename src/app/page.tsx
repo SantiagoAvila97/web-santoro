@@ -323,9 +323,14 @@ const App = () => {
       </nav>
 
       {/* Video Home - Full width, loop, responsive */}
-      <div className="w-full h-screen overflow-hidden">
+      <div className="w-full h-[100dvh] overflow-hidden relative">
         <video
-          className="w-full h-full object-cover object-center"
+          className="absolute top-1/2 left-1/2
+      min-w-[100dvh] min-h-[100vw]
+      -translate-x-1/2 -translate-y-1/2
+      -rotate-90 md:rotate-0
+      md:w-full md:h-full
+      object-cover"
           src="/video-home.mp4"
           autoPlay
           loop
