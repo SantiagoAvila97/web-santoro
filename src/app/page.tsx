@@ -22,6 +22,7 @@ import {
   Volume2,
   Waves,
   Sparkles,
+  MagnetIcon,
 } from "lucide-react";
 import { BenefitHotspot } from "./functions/benefit";
 import { redirectToWhatsapp } from "./functions/whatsapp";
@@ -388,12 +389,12 @@ const App = () => {
               SANTORO EXCLUSIVE - TECNOLOGÍA BOGOTÁ
             </h2>
             <div className="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight mb-6 leading-[1.1]">
-              Sonido Puro. <br />
-              <span className="text-gray-400">Estilo Atemporal.</span>
+              Sonido Puro <br />
+              <span className="text-gray-400">Estilo Atemporal</span>
             </div>
             <p className="text-lg md:text-xl text-gray-500 mb-8 md:mb-10 max-w-lg mx-auto md:mx-0">
               Tecnología curada por expertos. Tu tienda de confianza para AirPods Pro
-              2, AirPods 4 y Apple Watch en Colombia.
+              2 y 3, AirPods Gen4, AirPods Max, Apple Watch y accesorios en Colombia.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start px-4 sm:px-0">
               <a
@@ -476,14 +477,14 @@ const App = () => {
               Lanzamiento Exclusivo
             </span>
             <h2 className="text-4xl md:text-7xl font-bold mb-6 text-white leading-tight">
-              AirPods Pro 3. <br />
+              AIRPODS PRO 3 <br />
               <span className="block text-2xl md:text-4xl font-semibold text-gray-300 mt-2">
-                Silencio maestro.
+                Sonido Premium
               </span>
             </h2>
             <p className="text-lg md:text-2xl text-neutral-400 mb-10 max-w-lg mx-auto md:mx-0">
-              Cancelación de ruido 2.0 y chip H3 para una fidelidad que no habías
-              escuchado antes en Colombia.
+              Cancelación de ruido 2.0 para una experiencia que no habías escuchado
+              antes.
             </p>
             <div className="grid grid-cols-2 gap-6 mb-12 max-w-sm mx-auto md:mx-0">
               <div className="flex items-center gap-3">
@@ -496,19 +497,19 @@ const App = () => {
                 <div className="p-2 bg-neutral-800 rounded-lg">
                   <Zap size={20} className="text-yellow-500" />
                 </div>
-                <span className="text-sm font-medium">Carga Ultra</span>
+                <span className="text-sm font-medium">Carga rapida</span>
               </div>
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-neutral-800 rounded-lg">
                   <Shield size={20} className="text-green-500" />
                 </div>
-                <span className="text-sm font-medium">Garantía Apple</span>
+                <span className="text-sm font-medium">Garantía 6 meses</span>
               </div>
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-neutral-800 rounded-lg">
                   <Volume2 size={20} className="text-purple-500" />
                 </div>
-                <span className="text-sm font-medium">Lossless Audio</span>
+                <span className="text-sm font-medium">Sonido envolvente</span>
               </div>
             </div>
             <div className="mb-2">
@@ -539,10 +540,10 @@ const App = () => {
               La máxima expresión del sonido
             </span>
             <h2 className="text-5xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-b from-gray-400 to-black uppercase tracking-tighter">
-              Magnético Pro Max
+              AirPods Max
             </h2>
             <p className="text-gray-500 text-lg md:text-xl mt-4 font-medium max-w-2xl mx-auto">
-              Un diseño circumaural completamente reimaginado. El equilibrio perfecto
+              Un diseño acústico completamente reimaginado. El equilibrio perfecto
               entre sonido de alta fidelidad y la magia de los AirPods.
             </p>
           </div>
@@ -565,7 +566,7 @@ const App = () => {
 
                 <div className="flex gap-4 items-start p-4 bg-white rounded-2xl shadow-sm border border-gray-100 transition-hover hover:shadow-md">
                   <div className="bg-blue-600 text-white p-4 rounded-2xl">
-                    <Bluetooth size={28} />
+                    <MagnetIcon size={28} />
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-black">
@@ -646,7 +647,7 @@ const App = () => {
                   </div>
                 </div>
                 {/* Badge de Precio o Acción */}
-                <div className="absolute -bottom-0 -right-6 bg-white p-6 rounded-[2rem] shadow-2xl border border-gray-100 -rotate-2 flex flex-col items-center">
+                <div className="absolute -bottom-0 -right-6 bg-white p-6 rounded-[2rem] shadow-2xl border border-gray-100 -rotate-2 flex flex-col items-center scale-[0.8] md:scale-100">
                   <span className="block text-blue-600 text-[10px] font-black uppercase tracking-tighter mb-1">
                     Oferta Bogotá
                   </span>
@@ -674,13 +675,13 @@ const App = () => {
                 }}
                 className="cursor-pointer bg-black text-white px-20 py-6 rounded-[2rem] font-bold hover:bg-neutral-800 transition-all text-xl shadow-2xl flex items-center gap-4 group transform hover:scale-105"
               >
-                Comprar Magnético Pro Max
+                Comprar AirPods Max
                 <div className="bg-blue-600 rounded-full p-1 group-hover:rotate-12 transition-transform">
                   <Zap size={18} className="fill-white text-white" />
                 </div>
               </button>
               <p className="mt-4 text-gray-400 text-sm font-medium italic">
-                Disponibilidad inmediata en tienda física y online.
+                Disponibilidad inmediata en tienda online.
               </p>
             </div>
           </div>
@@ -697,7 +698,7 @@ const App = () => {
             {
               icon: <Zap className="text-yellow-500" />,
               title: "Carga Rápida",
-              desc: "20W Power Delivery",
+              desc: "Para todo el día",
             },
             {
               icon: <ShieldCheck className="text-blue-500" />,
@@ -762,10 +763,10 @@ const App = () => {
           </div>
           <div className="w-full md:flex-1 order-1 md:order-2 text-center md:text-left">
             <span className="text-blue-400 font-semibold text-sm md:text-lg tracking-wider">
-              AIRPODS PRO 2 - SANTORO
+              Inmersión absoluta
             </span>
             <h2 className="text-3xl md:text-6xl font-bold mb-6 mt-2 leading-tight">
-              Inmersión absoluta.
+              AIRPODS PRO 2
             </h2>
             <ul className="space-y-4 md:space-y-6 text-left max-w-md mx-auto md:mx-0">
               <li className="flex items-start gap-4">
@@ -790,7 +791,7 @@ const App = () => {
                     Batería de larga duración
                   </h4>
                   <p className="text-zinc-400 text-sm md:text-base">
-                    Hasta 30 horas con estuche MagSafe.
+                    Hasta 30 horas con estuche.
                   </p>
                 </div>
               </li>
@@ -839,15 +840,14 @@ const App = () => {
           </div>
           <div className="w-full md:flex-1 text-center md:text-left">
             <span className="text-gray-400 font-semibold text-sm md:text-lg tracking-wider uppercase">
-              Nuevos AirPods 4 Colombia
+              Ajuste icónico - Sonido épico
             </span>
             <h2 className="text-3xl md:text-6xl font-bold mb-6 mt-2 text-black">
-              Ajuste icónico. <br />
-              Sonido épico.
+              AIRPODS GEN 4
             </h2>
             <p className="text-base md:text-xl text-gray-500 mb-8 max-w-md mx-auto md:mx-0">
-              Rediseñados para una comodidad inigualable. La nueva referencia de
-              AirPods en Bogotá.
+              Rediseñados para una comodidad inigualable. La referencia preferido por
+              los Colombianos.
             </p>
             <div className="flex items-center justify-center md:justify-start gap-4 md:gap-6 mb-8">
               <div className="flex flex-col">
@@ -882,7 +882,7 @@ const App = () => {
       </section>
 
       {/* NUEVA SECCIÓN: Beneficios */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-white pb-30">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <div className="p-6 rounded-2xl bg-gray-50">
@@ -901,9 +901,9 @@ const App = () => {
             </div>
             <div className="p-6 rounded-2xl bg-gray-50">
               <Sparkles className="mx-auto mb-4 text-blue-500" size={32} />
-              <h4 className="font-bold mb-2">Original 100%</h4>
+              <h4 className="font-bold mb-2">Calidad 1.1</h4>
               <p className="text-sm text-gray-500">
-                Productos sellados con serial verificable.
+                Productos sellados con garantía.
               </p>
             </div>
           </div>
@@ -911,7 +911,7 @@ const App = () => {
       </section>
 
       {/* NUEVA SECCIÓN: Cuadro Comparativo */}
-      <section className="py-20 bg-white pb-30">
+      {/* <section className="py-20 bg-white pb-30">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-5xl font-bold text-black mb-4">
@@ -949,7 +949,7 @@ const App = () => {
             </table>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Quiénes Somos */}
       <section
@@ -1013,11 +1013,10 @@ const App = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-16">
             <span className="text-black font-semibold text-sm md:text-lg tracking-widest uppercase">
-              Apple Watch Series 10 - SANTORO Store
+              Más delgado <span className="text-gray-400">Y más brillante</span>
             </span>
             <h2 className="text-4xl md:text-7xl font-extrabold mt-4 mb-6 tracking-tight">
-              Más delgado. <br />
-              <span className="text-gray-400">Y más brillante.</span>
+              WATCH SERIE 10
             </h2>
           </div>
 
@@ -1083,10 +1082,10 @@ const App = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="mb-10 md:mb-12 text-center md:text-left">
             <h2 className="text-3xl md:text-5xl font-bold tracking-tight">
-              SANTORO Essentials
+              SANTORO Accesorios
             </h2>
             <p className="text-gray-500 text-base md:text-lg mt-2">
-              Carga MagSafe y protección para iPhone certificada por expertos.
+              Accesorios de calidad para complementar tu experiencia tecnológica.
             </p>
           </div>
 
@@ -1168,12 +1167,14 @@ const App = () => {
           <div className="flex flex-wrap justify-center gap-6 md:gap-8 text-sm text-zinc-500">
             <a
               href="https://www.instagram.com/santorostore.oficial?igsh=MTRvY2FqN3BiazY4MQ%3D%3D&utm_source=qr"
+              target="blank"
               className="hover:text-black transition-colors"
             >
               Instagram
             </a>
             <a
               href="https://www.tiktok.com/@santorostore.oficial?_r=1&_t=ZS-953EhWIXaEx"
+              target="blank"
               className="hover:text-black transition-colors"
             >
               TikTok
@@ -1183,7 +1184,7 @@ const App = () => {
             </a>
           </div>
           <div className="text-xs md:text-sm text-zinc-400 text-center md:text-right">
-            SANTORO: Tienda de AirPods Pro y Apple Watch. Envíos a toda Colombia.
+            SANTORO: Envíos a toda Colombia.
             <br />© 2024 SANTORO. Developed with ❤️ by Engineers.
           </div>
         </div>
