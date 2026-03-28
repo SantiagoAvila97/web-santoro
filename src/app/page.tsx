@@ -28,9 +28,7 @@ import { redirectToWhatsapp } from "./functions/whatsapp";
 
 const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [openMobileDropdown, setOpenMobileDropdown] = useState<
-    "airpods" | "relojes" | null
-  >(null);
+  const [openMobileDropdown, setOpenMobileDropdown] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -103,7 +101,11 @@ const App = () => {
     };
   }, []);
 
-  const navDropdowns = [
+  const navDropdowns: {
+    name: string;
+    id: string;
+    items: { name: string; href: string; target?: string }[];
+  }[] = [
     {
       name: "AirPods",
       id: "airpods" as const,
@@ -117,13 +119,28 @@ const App = () => {
     {
       name: "Relojes",
       id: "relojes" as const,
-      items: [{ name: "Watch Series 10", href: "#watch-10" }],
+      items: [
+        { name: "Watch Series 10", href: "#watch-10" },
+        { name: "Accesorios", href: "#accesorios" },
+      ],
     },
-  ];
-
-  const navLinks = [
-    { name: "Accesorios", href: "#accesorios" },
-    { name: "Nosotros", href: "#nosotros" },
+    {
+      name: "Nosotros",
+      id: "nosotros" as const,
+      items: [
+        { name: "Quién Somos", href: "#nosotros" },
+        {
+          name: "Instagram",
+          href: "https://www.instagram.com/santorostore.oficial?igsh=MTRvY2FqN3BiazY4MQ%3D%3D&utm_source=qr",
+          target: "_blank",
+        },
+        {
+          name: "TikTok",
+          href: "https://www.tiktok.com/@santorostore.oficial?_r=1&_t=ZS-953EhWIXaEx",
+          target: "_blank",
+        },
+      ],
+    },
   ];
 
   const comparisonData = [
@@ -177,7 +194,11 @@ const App = () => {
         className={`fixed w-full z-50 transition-all duration-300 ${scrolled || isMenuOpen ? "bg-white/90 backdrop-blur-md shadow-sm" : "bg-transparent"}`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 md:h-20 flex items-center justify-between">
-          <div className="text-xl md:text-2xl font-bold tracking-tighter text-black flex items-center">
+          <div
+            className="text-xl md:text-2xl font-bold tracking-tighter text-black flex items-center cursor-pointer select-none"
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            title="Ir al inicio"
+          >
             <img
               src="/favicon.ico"
               alt="Santoro Logo"
@@ -185,7 +206,7 @@ const App = () => {
               style={{ display: "inline-block" }}
               draggable="false"
             />
-            <span className="bg-gradient-to-r from-gray-400 to-gray-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-gray-400 to-gray-600 bg-clip-text text-transparent ml-1">
               SANTORO
             </span>
           </div>
@@ -235,22 +256,16 @@ const App = () => {
                       href={item.href}
                       className="block rounded-lg px-3 py-2 text-sm hover:bg-gray-50 hover:text-blue-600 transition-colors cursor-pointer"
                       style={{ cursor: "pointer" }}
+                      target={item.target || undefined}
+                      rel={
+                        item.target === "_blank" ? "noopener noreferrer" : undefined
+                      }
                     >
                       {item.name}
                     </a>
                   ))}
                 </div>
               </div>
-            ))}
-
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                className="hover:text-blue-600 transition-colors"
-              >
-                {link.name}
-              </a>
             ))}
           </div>
 
@@ -303,6 +318,12 @@ const App = () => {
                             setOpenMobileDropdown(null);
                           }}
                           className="text-base text-gray-700 py-1"
+                          target={item.target || undefined}
+                          rel={
+                            item.target === "_blank"
+                              ? "noopener noreferrer"
+                              : undefined
+                          }
                         >
                           {item.name}
                         </a>
@@ -312,19 +333,6 @@ const App = () => {
                 </div>
               ))}
 
-              {navLinks.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  onClick={() => {
-                    setIsMenuOpen(false);
-                    setOpenMobileDropdown(null);
-                  }}
-                  className="text-lg font-medium border-b border-gray-50 pb-2"
-                >
-                  {link.name}
-                </a>
-              ))}
               <button
                 onClick={() => redirectToWhatsapp("Sin selección", "$0")}
                 className="bg-black text-white w-full py-4 rounded-2xl font-bold"
@@ -789,12 +797,12 @@ const App = () => {
             </ul>
             <div className="mt-15">
               <span className="inline-block bg-green-100 text-green-800 font-bold px-4 py-1 rounded-full text-base md:text-lg">
-                $100.000 COP
+                $90.000 COP
               </span>
             </div>
             <button
               onClick={() => {
-                redirectToWhatsapp("AirPods Pro 2", "$100.000 COP");
+                redirectToWhatsapp("AirPods Pro 2", "$90.000 COP");
               }}
               className="cursor-pointer mt-8 md:mt-2 w-full sm:w-auto bg-white text-black px-10 py-4 rounded-full font-bold hover:bg-zinc-200 transition-all active:scale-95 transform hover:scale-105"
             >
@@ -858,12 +866,12 @@ const App = () => {
             </div>
             <div className="mb-3 mt-15">
               <span className="inline-block bg-green-100 text-green-800 font-bold px-4 py-1 rounded-full text-base md:text-lg">
-                $120.000 COP
+                $110.000 COP
               </span>
             </div>
             <button
               onClick={() => {
-                redirectToWhatsapp("AirPods 4", "$120.000 COP");
+                redirectToWhatsapp("AirPods 4", "$110.000 COP");
               }}
               className="cursor-pointer w-full sm:w-auto bg-black text-white px-10 py-4 rounded-full font-bold hover:opacity-80 transition-all shadow-lg transform hover:scale-105"
             >
@@ -1158,11 +1166,17 @@ const App = () => {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="text-2xl font-bold tracking-tighter">SANTORO COLOMBIA</div>
           <div className="flex flex-wrap justify-center gap-6 md:gap-8 text-sm text-zinc-500">
-            <a href="#" className="hover:text-black transition-colors">
+            <a
+              href="https://www.instagram.com/santorostore.oficial?igsh=MTRvY2FqN3BiazY4MQ%3D%3D&utm_source=qr"
+              className="hover:text-black transition-colors"
+            >
               Instagram
             </a>
-            <a href="#" className="hover:text-black transition-colors">
-              WhatsApp
+            <a
+              href="https://www.tiktok.com/@santorostore.oficial?_r=1&_t=ZS-953EhWIXaEx"
+              className="hover:text-black transition-colors"
+            >
+              TikTok
             </a>
             <a href="#" className="hover:text-black transition-colors">
               Políticas
