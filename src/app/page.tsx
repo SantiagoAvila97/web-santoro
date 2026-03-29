@@ -17,7 +17,6 @@ import {
   Activity,
   Monitor,
   Music,
-  Bluetooth,
   Shield,
   Volume2,
   Waves,
@@ -111,10 +110,10 @@ const App = () => {
       name: "AirPods",
       id: "airpods" as const,
       items: [
-        { name: "Serie 4", href: "#airpods-4" },
-        { name: "Pro 2", href: "#airpods-pro" },
         { name: "Pro 3", href: "#airpods-pro-3" },
         { name: "Max", href: "#airpods-max" },
+        { name: "Serie 4", href: "#airpods-4" },
+        { name: "Pro 2", href: "#airpods-pro" },
       ],
     },
     {
@@ -129,7 +128,7 @@ const App = () => {
       name: "Nosotros",
       id: "nosotros" as const,
       items: [
-        { name: "Quién Somos", href: "#nosotros" },
+        { name: "Quienes somos", href: "#nosotros" },
         {
           name: "Instagram",
           href: "https://www.instagram.com/santorostore.oficial?igsh=MTRvY2FqN3BiazY4MQ%3D%3D&utm_source=qr",
@@ -144,50 +143,49 @@ const App = () => {
     },
   ];
 
-  const comparisonData = [
-    {
-      feature: "Cancelación de Ruido",
-      airpods4: "No",
-      pro2: "Activa (ANC)",
-      pro3: "ANC 2.0 Pro",
-      max: "Premium ANC",
-    },
-    {
-      feature: "Chip de Audio",
-      airpods4: "H2",
-      pro2: "H2",
-      pro3: "H3 (Nuevo)",
-      max: "H1 (Dual)",
-    },
-    {
-      feature: "Autonomía (Caja)",
-      airpods4: "30 hrs",
-      pro2: "30 hrs",
-      pro3: "36 hrs",
-      max: "20 hrs",
-    },
-    {
-      feature: "Audio Espacial",
-      airpods4: "Personalizado",
-      pro2: "Personalizado",
-      pro3: "Dinámico 360°",
-      max: "Cinematográfico",
-    },
-    {
-      feature: "Resistencia IP",
-      airpods4: "IP54",
-      pro2: "IP54",
-      pro3: "IPX8 (Total)",
-      max: "N/A",
-    },
-  ];
+  // const comparisonData = [
+  //   {
+  //     feature: "Cancelación de Ruido",
+  //     airpods4: "No",
+  //     pro2: "Activa (ANC)",
+  //     pro3: "ANC 2.0 Pro",
+  //     max: "Premium ANC",
+  //   },
+  //   {
+  //     feature: "Chip de Audio",
+  //     airpods4: "H2",
+  //     pro2: "H2",
+  //     pro3: "H3 (Nuevo)",
+  //     max: "H1 (Dual)",
+  //   },
+  //   {
+  //     feature: "Autonomía (Caja)",
+  //     airpods4: "30 hrs",
+  //     pro2: "30 hrs",
+  //     pro3: "36 hrs",
+  //     max: "20 hrs",
+  //   },
+  //   {
+  //     feature: "Audio Espacial",
+  //     airpods4: "Personalizado",
+  //     pro2: "Personalizado",
+  //     pro3: "Dinámico 360°",
+  //     max: "Cinematográfico",
+  //   },
+  //   {
+  //     feature: "Resistencia IP",
+  //     airpods4: "IP54",
+  //     pro2: "IP54",
+  //     pro3: "IPX8 (Total)",
+  //     max: "N/A",
+  //   },
+  // ];
 
   return (
     <div className="min-h-screen bg-[#f5f5f7] text-[#1d1d1f] font-sans selection:bg-blue-200 overflow-x-hidden">
       {/* Marcado oculto para SEO de alto nivel (H1 prioritario) */}
       <h1 className="sr-only">
-        SANTORO - Los mejores AirPods Pro 2, AirPods 4 y Apple Watch en Bogotá,
-        Colombia
+        SANTORO - Los mejores AirPods, Apple Watch y accesorios en Colombia
       </h1>
 
       {/* Navigation */}
@@ -393,8 +391,8 @@ const App = () => {
               <span className="text-gray-400">Estilo Atemporal</span>
             </div>
             <p className="text-lg md:text-xl text-gray-500 mb-8 md:mb-10 max-w-lg mx-auto md:mx-0">
-              Tecnología curada por expertos. Tu tienda de confianza para AirPods Pro
-              2 y 3, AirPods Gen4, AirPods Max, Apple Watch y accesorios en Colombia.
+              Tecnología curada por expertos. Tu tienda de confianza para AirPods,
+              Watchs y accesorios en Colombia.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start px-4 sm:px-0">
               <a
@@ -509,7 +507,7 @@ const App = () => {
                 <div className="p-2 bg-neutral-800 rounded-lg">
                   <Volume2 size={20} className="text-purple-500" />
                 </div>
-                <span className="text-sm font-medium">Sonido envolvente</span>
+                <span className="text-sm font-medium">Sonido VIP</span>
               </div>
             </div>
             <div className="mb-2">
@@ -805,7 +803,7 @@ const App = () => {
               onClick={() => {
                 redirectToWhatsapp("AirPods Pro 2", "$90.000 COP");
               }}
-              className="cursor-pointer mt-8 md:mt-2 w-full sm:w-auto bg-white text-black px-10 py-4 rounded-full font-bold hover:bg-zinc-200 transition-all active:scale-95 transform hover:scale-105"
+              className="cursor-pointer mt-5 md:mt-2 w-full sm:w-auto bg-white text-black px-10 py-4 rounded-full font-bold hover:bg-zinc-200 transition-all active:scale-95 transform hover:scale-105"
             >
               Comprar AirPods Pro 2
             </button>
@@ -1038,7 +1036,7 @@ const App = () => {
                   actividad diaria.
                 </p>
               </div>
-              <div className="mb-3">
+              <div className="mb-3 flex flex-col items-center">
                 <span className="inline-block bg-green-100 text-green-800 font-bold px-4 py-1 rounded-full text-base md:text-lg">
                   $160.000 COP
                 </span>
