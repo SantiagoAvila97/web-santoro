@@ -519,7 +519,7 @@ const App = () => {
               onClick={() => {
                 redirectToWhatsapp("AirPods Pro 3", "$150.000 COP");
               }}
-              className="cursor-pointer w-full sm:w-auto bg-white text-black px-12 py-5 rounded-full font-black text-lg hover:bg-neutral-200 transition-all transform hover:scale-105 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
+              className="cursor-pointer w-full sm:w-auto bg-white text-black px-12 py-5 rounded-full font-black text-lg hover:bg-neutral-200 active:bg-green-500 active:text-white transition-all transform hover:scale-105 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
             >
               Comprar AirPods Pro 3
             </button>
@@ -671,7 +671,7 @@ const App = () => {
                 onClick={() => {
                   redirectToWhatsapp("Magnético Pro Max", "$160.000 COP");
                 }}
-                className="cursor-pointer bg-black text-white px-20 py-6 rounded-[2rem] font-bold hover:bg-neutral-800 transition-all text-xl shadow-2xl flex items-center gap-4 group transform hover:scale-105"
+                className="cursor-pointer bg-black text-white px-20 py-6 rounded-[2rem] font-bold hover:bg-neutral-800 active:bg-green-500 active:text-white transition-all text-xl shadow-2xl flex items-center gap-4 group transform hover:scale-105"
               >
                 Comprar AirPods Max
                 <div className="bg-blue-600 rounded-full p-1 group-hover:rotate-12 transition-transform">
@@ -803,7 +803,7 @@ const App = () => {
               onClick={() => {
                 redirectToWhatsapp("AirPods Pro 2", "$90.000 COP");
               }}
-              className="cursor-pointer mt-5 md:mt-2 w-full sm:w-auto bg-white text-black px-10 py-4 rounded-full font-bold hover:bg-zinc-200 transition-all active:scale-95 transform hover:scale-105"
+              className="cursor-pointer mt-5 md:mt-2 w-full sm:w-auto bg-white text-black px-10 py-4 rounded-full font-bold hover:bg-zinc-200 transition-all transform hover:scale-105 active:bg-green-500 active:text-white "
             >
               Comprar AirPods Pro 2
             </button>
@@ -871,7 +871,7 @@ const App = () => {
               onClick={() => {
                 redirectToWhatsapp("AirPods 4", "$110.000 COP");
               }}
-              className="cursor-pointer w-full sm:w-auto bg-black text-white px-10 py-4 rounded-full font-bold hover:opacity-80 transition-all shadow-lg transform hover:scale-105"
+              className="cursor-pointer w-full sm:w-auto bg-black text-white px-10 py-4 rounded-full font-bold hover:opacity-80 transition-all shadow-lg transform hover:scale-105 active:bg-green-500 active:text-white "
             >
               Comprar AirPods 4
             </button>
@@ -1041,7 +1041,7 @@ const App = () => {
                   $160.000 COP
                 </span>
               </div>
-              <button className="cursor-pointer w-full bg-black text-white px-10 py-5 rounded-full font-bold text-lg hover:bg-gray-800 transition-all flex items-center justify-center gap-3 transform hover:scale-105">
+              <button className="cursor-pointer w-full bg-black text-white px-10 py-5 rounded-full font-bold text-lg hover:bg-gray-800 transition-all flex items-center justify-center gap-3 transform hover:scale-105 active:bg-green-500 active:text-white ">
                 Comprar Watch 10 <ChevronRight size={20} />
               </button>
             </div>
