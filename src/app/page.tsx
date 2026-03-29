@@ -23,13 +23,135 @@ import {
   Sparkles,
   MagnetIcon,
 } from "lucide-react";
+
 import { BenefitHotspot } from "./functions/benefit";
 import { redirectToWhatsapp } from "./functions/whatsapp";
+
+// Modal de compra y animación carrito
+function PurchaseModal({ show }: { show: boolean; onDone: () => void }) {
+  return show ? (
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40">
+      <div className="bg-white rounded-3xl shadow-2xl p-10 flex flex-col items-center relative animate-fade-in-up min-w-[320px] max-w-[90vw]">
+        <div className="mb-6 flex flex-col items-center justify-center">
+          {/* <div className="relative w-32 h-20 flex items-center justify-center">
+            <span className="absolute left-0 top-1/2 -translate-y-1/2 animate-cart-move">
+              <svg
+                width="80"
+                height="60"
+                viewBox="0 0 80 60"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect x="10" y="20" width="50" height="20" rx="8" fill="#16a34a" />
+                <rect x="20" y="10" width="30" height="15" rx="6" fill="#22d3ee" />
+                <circle cx="20" cy="45" r="6" fill="#16a34a" />
+                <circle cx="50" cy="45" r="6" fill="#16a34a" />
+                <rect x="35" y="5" width="10" height="10" rx="3" fill="#22d3ee" />
+              </svg>
+            </span>
+          </div> */}
+          <div className="mt-6 flex items-center justify-center">
+            <span className="inline-block animate-spin-slow">
+              <svg
+                width="48"
+                height="48"
+                viewBox="0 0 48 48"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  cx="24"
+                  cy="24"
+                  r="22"
+                  stroke="#22c55e"
+                  strokeWidth="4"
+                  opacity="0.2"
+                />
+                <path
+                  d="M24 4a20 20 0 1 1-14.14 5.86"
+                  stroke="#22c55e"
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                />
+                <circle cx="24" cy="24" r="12" fill="#22c55e" />
+                <path
+                  d="M18 24l4 4 8-8"
+                  stroke="#fff"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </span>
+          </div>
+        </div>
+        <h2 className="text-2xl md:text-3xl font-black text-green-700 mb-2 text-center drop-shadow-lg">
+          ¡Procesando tu compra!
+        </h2>
+        <p className="text-gray-700 text-lg mb-4 text-center">
+          Estamos preparando tu pedido para WhatsApp
+        </p>
+      </div>
+      <style jsx>{`
+        @keyframes cart-move {
+          0% {
+            left: 0;
+          }
+          20% {
+            left: 20px;
+          }
+          40% {
+            left: 40px;
+          }
+          60% {
+            left: 60px;
+          }
+          80% {
+            left: 20px;
+          }
+          100% {
+            left: 0;
+          }
+        }
+        .animate-cart-move {
+          animation: cart-move 1.6s cubic-bezier(0.4, 0.1, 0.6, 0.9) 1;
+        }
+        .animate-spin-slow {
+          animation: spin 1.6s linear infinite;
+        }
+        @keyframes spin {
+          100% {
+            transform: rotate(360deg);
+          }
+        }
+      `}</style>
+    </div>
+  ) : null;
+}
 
 const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openMobileDropdown, setOpenMobileDropdown] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
+  // Modal de compra
+  const [purchaseModal, setPurchaseModal] = useState<{
+    show: boolean;
+  }>({ show: false });
+  // Botón en animación
+  const [buyingBtn, setBuyingBtn] = useState<string | null>(null);
+
+  // Función para manejar compra con animación y modal
+  const handleBuy = (product: string, price: string, btnId: string) => {
+    setBuyingBtn(btnId);
+    setPurchaseModal({ show: true });
+    setTimeout(() => {
+      setBuyingBtn(null);
+      setTimeout(() => {
+        redirectToWhatsapp(product, price);
+        setPurchaseModal({ show: false });
+      }, 1000);
+    }, 200);
+  };
 
   useEffect(() => {
     // --- LÓGICA SEO DINÁMICA ---
@@ -516,10 +638,9 @@ const App = () => {
               </span>
             </div>
             <button
-              onClick={() => {
-                redirectToWhatsapp("AirPods Pro 3", "$150.000 COP");
-              }}
-              className="cursor-pointer w-full sm:w-auto bg-white text-black px-12 py-5 rounded-full font-black text-lg hover:bg-neutral-200 transition-all transform hover:scale-105 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
+              onClick={() => handleBuy("AirPods Pro 3", "$150.000 COP", "btn-pro3")}
+              className={`cursor-pointer w-full sm:w-auto bg-white text-black px-12 py-5 rounded-full font-black text-lg hover:bg-neutral-200 transition-all transform hover:scale-105 shadow-[0_0_20px_rgba(255,255,255,0.1)] ${buyingBtn === "btn-pro3" ? "opacity-60 scale-95" : ""}`}
+              disabled={buyingBtn === "btn-pro3"}
             >
               Comprar AirPods Pro 3
             </button>
@@ -668,10 +789,11 @@ const App = () => {
                 </span>
               </div>
               <button
-                onClick={() => {
-                  redirectToWhatsapp("Magnético Pro Max", "$160.000 COP");
-                }}
-                className="cursor-pointer bg-black text-white px-20 py-6 rounded-[2rem] font-bold hover:bg-neutral-800 transition-all text-xl shadow-2xl flex items-center gap-4 group transform hover:scale-105"
+                onClick={() =>
+                  handleBuy("Magnético Pro Max", "$160.000 COP", "btn-max")
+                }
+                className={`cursor-pointer bg-black text-white px-20 py-6 rounded-[2rem] font-bold hover:bg-neutral-800 transition-all text-xl shadow-2xl flex items-center gap-4 group transform hover:scale-105 ${buyingBtn === "btn-max" ? "opacity-60 scale-95" : ""}`}
+                disabled={buyingBtn === "btn-max"}
               >
                 Comprar AirPods Max
                 <div className="bg-blue-600 rounded-full p-1 group-hover:rotate-12 transition-transform">
@@ -800,10 +922,9 @@ const App = () => {
               </span>
             </div>
             <button
-              onClick={() => {
-                redirectToWhatsapp("AirPods Pro 2", "$90.000 COP");
-              }}
-              className="cursor-pointer mt-5 md:mt-2 w-full sm:w-auto bg-white text-black px-10 py-4 rounded-full font-bold hover:bg-zinc-200 transition-all active:scale-95 transform hover:scale-105"
+              onClick={() => handleBuy("AirPods Pro 2", "$90.000 COP", "btn-pro2")}
+              className={`cursor-pointer mt-5 md:mt-2 w-full sm:w-auto bg-white text-black px-10 py-4 rounded-full font-bold hover:bg-zinc-200 transition-all active:scale-95 transform hover:scale-105 ${buyingBtn === "btn-pro2" ? "opacity-60 scale-95" : ""}`}
+              disabled={buyingBtn === "btn-pro2"}
             >
               Comprar AirPods Pro 2
             </button>
@@ -868,10 +989,9 @@ const App = () => {
               </span>
             </div>
             <button
-              onClick={() => {
-                redirectToWhatsapp("AirPods 4", "$110.000 COP");
-              }}
-              className="cursor-pointer w-full sm:w-auto bg-black text-white px-10 py-4 rounded-full font-bold hover:opacity-80 transition-all shadow-lg transform hover:scale-105"
+              onClick={() => handleBuy("AirPods 4", "$110.000 COP", "btn-4")}
+              className={`cursor-pointer w-full sm:w-auto bg-black text-white px-10 py-4 rounded-full font-bold hover:opacity-80 transition-all shadow-lg transform hover:scale-105 ${buyingBtn === "btn-4" ? "opacity-60 scale-95" : ""}`}
+              disabled={buyingBtn === "btn-4"}
             >
               Comprar AirPods 4
             </button>
@@ -1041,11 +1161,15 @@ const App = () => {
                   $160.000 COP
                 </span>
               </div>
-              <button className="cursor-pointer w-full bg-black text-white px-10 py-5 rounded-full font-bold text-lg hover:bg-gray-800 transition-all flex items-center justify-center gap-3 transform hover:scale-105">
+              <button
+                onClick={() => handleBuy("Watch 10", "$160.000 COP", "btn-watch10")}
+                className={`cursor-pointer w-full bg-black text-white px-10 py-5 rounded-full font-bold text-lg hover:bg-gray-800 transition-all flex items-center justify-center gap-3 transform hover:scale-105 ${buyingBtn === "btn-watch10" ? "opacity-60 scale-95" : ""}`}
+                disabled={buyingBtn === "btn-watch10"}
+              >
                 Comprar Watch 10 <ChevronRight size={20} />
               </button>
             </div>
-
+            $
             <div className="order-1 md:order-2 flex justify-center items-center relative">
               <div className="absolute w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-blue-100/50 rounded-full blur-[80px] -z-10 animate-pulse"></div>
 
@@ -1270,6 +1394,10 @@ const App = () => {
         }
       `,
         }}
+      />
+      <PurchaseModal
+        show={purchaseModal.show}
+        onDone={() => setPurchaseModal({ show: false })}
       />
     </div>
   );
