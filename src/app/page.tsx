@@ -3,17 +3,12 @@
 import { useState, useEffect } from "react";
 import {
   ShoppingCart,
-  Menu,
-  X,
   ChevronRight,
   ShieldCheck,
   Zap,
   CheckCircle2,
   Battery,
   Smartphone,
-  Code2,
-  Heart,
-  Rocket,
   Activity,
   Monitor,
   Music,
@@ -23,34 +18,210 @@ import {
   Sparkles,
   MagnetIcon,
 } from "lucide-react";
-import { BenefitHotspot } from "./functions/benefit";
-import { redirectToWhatsapp } from "./functions/whatsapp";
+import { BenefitHotspot } from "./shared/functions/benefit";
+import { redirectToWhatsapp } from "./shared/functions/whatsapp";
+import { SiteNavbar } from "./shared/components/site-navbar";
+import { SiteFooter } from "./shared/components/site-footer";
+
+type ProductCatalogItem = {
+  id: string;
+  anchorId: string;
+  name: string;
+  price: string;
+  detailPrice: string;
+  whatsappName: string;
+  delivery: string;
+  benefits: string[];
+  pitch: string;
+  ctaLabel: string;
+};
+
+const PRODUCTS: ProductCatalogItem[] = [
+  {
+    id: "catalog-airpods-pro-3",
+    anchorId: "airpods-pro-3",
+    name: "✨ AirPods Pro 3",
+    price: "💰 $145.000",
+    detailPrice: "$145.000 COP",
+    whatsappName: "AirPods Pro 3",
+    delivery: "📍 Entrega hoy mismo en Bogotá y pago contra entrega",
+    benefits: [
+      "Cancelación de ruido 2.0",
+      "Chip H3 de última generación",
+      "Audio Lossless Pro",
+      "Carga rápida para todo el día",
+      "Garantía directa Santoro 🔒",
+    ],
+    pitch:
+      "La opción premium para quienes quieren sonar diferente desde el primer uso.",
+    ctaLabel: "Comprar AirPods Pro 3",
+  },
+  {
+    id: "catalog-airpods-max",
+    anchorId: "airpods-max",
+    name: "🎵 AirPods Max",
+    price: "💰 $155.000",
+    detailPrice: "$155.000 COP",
+    whatsappName: "AirPods Max",
+    delivery: "📍 Entrega inmediata y pago contra entrega",
+    benefits: [
+      "Sonido envolvente 360°",
+      "Diseño premium tipo diadema",
+      "Almohadillas cómodas por horas",
+      "Batería de larga duración",
+      "Acople magnético profesional",
+    ],
+    pitch: "Ideales para trabajar, producir o disfrutar música con estilo total.",
+    ctaLabel: "Comprar AirPods Max",
+  },
+  {
+    id: "catalog-airpods-4-a",
+    anchorId: "airpods-4",
+    name: "🚀 AirPods Serie 4",
+    price: "💰 $95.000",
+    detailPrice: "$95.000 COP",
+    whatsappName: "AirPods Serie 4",
+    delivery: "📍 Envío express y pago contra entrega",
+    benefits: [
+      "Sonido claro y potente",
+      "Diseño ligero y cómodo",
+      "Conexión rápida con iPhone y Android",
+      "Excelente opción calidad/precio",
+      "Perfectos para uso diario",
+    ],
+    pitch: "Un best seller para regalar o renovar tus audífonos sin gastar de más.",
+    ctaLabel: "Comprar AirPods Serie 4",
+  },
+  {
+    id: "catalog-airpods-pro-2",
+    anchorId: "airpods-pro",
+    name: "🎧 AirPods Pro 2",
+    price: "💰 $85.000",
+    detailPrice: "$85.000 COP",
+    whatsappName: "AirPods Pro 2",
+    delivery: "📍 Entrega inmediata y pago contra entrega",
+    benefits: [
+      "Cancelación de ruido activa 🔇",
+      "Modo ambiente 🌎",
+      "Excelente calidad de sonido 🎶",
+      "Ajuste cómodo con almohadillas",
+      "Buena duración de batería 🔋",
+    ],
+    pitch: "Perfectos para concentrarte, viajar o usarlos en el gym 👌",
+    ctaLabel: "Comprar AirPods Pro 2",
+  },
+  {
+    id: "catalog-watch-serie-10",
+    anchorId: "watch-10",
+    name: "⌚ Apple Watch Serie 10",
+    price: "💰 $165.000",
+    detailPrice: "$165.000",
+    whatsappName: "Apple Watch Serie 10",
+    delivery: "📍 Entrega inmediata y pago contra entrega",
+    benefits: [
+      "Pantalla OLED amplia y brillante",
+      "Monitoreo avanzado de salud",
+      "Diseño premium ultraligero",
+      "Ideal para deporte y productividad",
+      "Garantía directa Santoro",
+    ],
+    pitch:
+      "El smartwatch ideal para quien busca estilo, rendimiento y salud en una sola pieza.",
+    ctaLabel: "Comprar Watch Serie 10",
+  },
+  {
+    id: "catalog-accesorios-premium",
+    anchorId: "accesorios",
+    name: "🔌 Accesorios Premium",
+    price: "💬 Precio variable",
+    detailPrice: "Precio según referencia",
+    whatsappName: "Accesorios Premium",
+    delivery: "📍 Entrega inmediata y pago contra entrega",
+    benefits: [
+      "Cargadores y cables de alta calidad",
+      "Cases premium para iPhone",
+      "Compatibles con ecosistema Apple",
+      "Stock según referencia consultada",
+      "Asesoría para elegir el accesorio ideal",
+    ],
+    pitch:
+      "Cotiza el accesorio exacto que necesitas y recibe recomendación personalizada.",
+    ctaLabel: "Cotizar Accesorios",
+  },
+];
 
 const App = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [openMobileDropdown, setOpenMobileDropdown] = useState<string | null>(null);
-  const [scrolled, setScrolled] = useState(false);
+  const [catalogPage, setCatalogPage] = useState(0);
+  const [isMobileCatalog, setIsMobileCatalog] = useState(false);
+
+  const CATALOG_PAGE_SIZE = isMobileCatalog ? 1 : 3;
+  const catalogPages: ProductCatalogItem[][] = [];
+  for (let index = 0; index < PRODUCTS.length; index += CATALOG_PAGE_SIZE) {
+    catalogPages.push(PRODUCTS.slice(index, index + CATALOG_PAGE_SIZE));
+  }
+  const totalCatalogPages = catalogPages.length;
+  const safeCatalogPage = Math.min(catalogPage, Math.max(totalCatalogPages - 1, 0));
+
+  const isCatalogSlider = PRODUCTS.length > CATALOG_PAGE_SIZE;
+  const pro3Product = PRODUCTS.find(
+    (product) => product.anchorId === "airpods-pro-3",
+  );
+  const maxProduct = PRODUCTS.find((product) => product.anchorId === "airpods-max");
+  const pro2Product = PRODUCTS.find((product) => product.anchorId === "airpods-pro");
+  const airpods4Product = PRODUCTS.find(
+    (product) => product.anchorId === "airpods-4",
+  );
+  const watchProduct = PRODUCTS.find((product) => product.anchorId === "watch-10");
+  const accessoriesProduct = PRODUCTS.find(
+    (product) => product.anchorId === "accesorios",
+  );
+
+  const goToCatalogPage = (index: number) => {
+    if (totalCatalogPages === 0) return;
+    setCatalogPage(
+      ((index % totalCatalogPages) + totalCatalogPages) % totalCatalogPages,
+    );
+  };
 
   useEffect(() => {
-    // --- LÓGICA SEO DINÁMICA ---
-    document.title =
-      "SANTORO | AirPods Pro 2, Apple Watch y Tecnología Premium Colombia";
+    const mediaQuery = window.matchMedia("(max-width: 767px)");
 
-    // Meta Description para buscadores
+    const handleCatalogViewport = () => {
+      setIsMobileCatalog(mediaQuery.matches);
+    };
+
+    handleCatalogViewport();
+
+    if (typeof mediaQuery.addEventListener === "function") {
+      mediaQuery.addEventListener("change", handleCatalogViewport);
+    } else {
+      mediaQuery.addListener(handleCatalogViewport);
+    }
+
+    return () => {
+      if (typeof mediaQuery.removeEventListener === "function") {
+        mediaQuery.removeEventListener("change", handleCatalogViewport);
+      } else {
+        mediaQuery.removeListener(handleCatalogViewport);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    document.title = "SANTORO";
+
     const metaDesc = document.createElement("meta");
     metaDesc.name = "description";
     metaDesc.content =
       "SANTORO: La mejor selección de AirPods Pro 2, AirPods 4 y Apple Watch Series 10 en Bogotá. Calidad 1.1 premium, garantía real y envíos express a toda Colombia.";
     document.head.appendChild(metaDesc);
 
-    // Keywords (Aunque Google ya no las usa tanto, otros buscadores sí)
     const metaKeywords = document.createElement("meta");
     metaKeywords.name = "keywords";
     metaKeywords.content =
       "SANTORO, AirPods Pro 2 Bogotá, Apple Watch Series 10 Colombia, AirPods 4, tecnología premium, audífonos bluetooth, smartwatch Colombia";
     document.head.appendChild(metaKeywords);
 
-    // JSON-LD (Datos Estructurados para aparecer con info de producto en Google)
     const script = document.createElement("script");
     script.type = "application/ld+json";
     script.innerHTML = JSON.stringify({
@@ -86,100 +257,13 @@ const App = () => {
     });
     document.head.appendChild(script);
 
-    // --- MANEJO DE SCROLL ---
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
-    window.addEventListener("scroll", handleScroll);
-
     return () => {
-      window.removeEventListener("scroll", handleScroll);
       if (document.head.contains(metaDesc)) document.head.removeChild(metaDesc);
       if (document.head.contains(metaKeywords))
         document.head.removeChild(metaKeywords);
       if (document.head.contains(script)) document.head.removeChild(script);
     };
   }, []);
-
-  const navDropdowns: {
-    name: string;
-    id: string;
-    items: { name: string; href: string; target?: string }[];
-  }[] = [
-    {
-      name: "AirPods",
-      id: "airpods" as const,
-      items: [
-        { name: "Pro 3", href: "#airpods-pro-3" },
-        { name: "Max", href: "#airpods-max" },
-        { name: "Serie 4", href: "#airpods-4" },
-        { name: "Pro 2", href: "#airpods-pro" },
-      ],
-    },
-    {
-      name: "Relojes",
-      id: "relojes" as const,
-      items: [
-        { name: "Watch Series 10", href: "#watch-10" },
-        { name: "Accesorios", href: "#accesorios" },
-      ],
-    },
-    {
-      name: "Nosotros",
-      id: "nosotros" as const,
-      items: [
-        { name: "Quienes somos", href: "#nosotros" },
-        {
-          name: "Instagram",
-          href: "https://www.instagram.com/santorostore.oficial?igsh=MTRvY2FqN3BiazY4MQ%3D%3D&utm_source=qr",
-          target: "_blank",
-        },
-        {
-          name: "TikTok",
-          href: "https://www.tiktok.com/@santorostore.oficial?_r=1&_t=ZS-953EhWIXaEx",
-          target: "_blank",
-        },
-      ],
-    },
-  ];
-
-  // const comparisonData = [
-  //   {
-  //     feature: "Cancelación de Ruido",
-  //     airpods4: "No",
-  //     pro2: "Activa (ANC)",
-  //     pro3: "ANC 2.0 Pro",
-  //     max: "Premium ANC",
-  //   },
-  //   {
-  //     feature: "Chip de Audio",
-  //     airpods4: "H2",
-  //     pro2: "H2",
-  //     pro3: "H3 (Nuevo)",
-  //     max: "H1 (Dual)",
-  //   },
-  //   {
-  //     feature: "Autonomía (Caja)",
-  //     airpods4: "30 hrs",
-  //     pro2: "30 hrs",
-  //     pro3: "36 hrs",
-  //     max: "20 hrs",
-  //   },
-  //   {
-  //     feature: "Audio Espacial",
-  //     airpods4: "Personalizado",
-  //     pro2: "Personalizado",
-  //     pro3: "Dinámico 360°",
-  //     max: "Cinematográfico",
-  //   },
-  //   {
-  //     feature: "Resistencia IP",
-  //     airpods4: "IP54",
-  //     pro2: "IP54",
-  //     pro3: "IPX8 (Total)",
-  //     max: "N/A",
-  //   },
-  // ];
 
   return (
     <div className="min-h-screen bg-[#f5f5f7] text-[#1d1d1f] font-sans selection:bg-blue-200 overflow-x-hidden">
@@ -189,159 +273,7 @@ const App = () => {
       </h1>
 
       {/* Navigation */}
-      <nav
-        className={`fixed w-full z-50 transition-all duration-300 ${scrolled || isMenuOpen ? "bg-white/90 backdrop-blur-md shadow-sm" : "bg-transparent"}`}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 md:h-20 flex items-center justify-between">
-          <div
-            className="text-xl md:text-2xl font-bold tracking-tighter text-black flex items-center cursor-pointer select-none"
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            title="Ir al inicio"
-          >
-            <img
-              src="/favicon.ico"
-              alt="Santoro Logo"
-              className="w-8 h-8 md:w-10 md:h-10"
-              style={{ display: "inline-block" }}
-              draggable="false"
-            />
-            <span className="bg-gradient-to-r from-gray-400 to-gray-600 bg-clip-text text-transparent ml-1">
-              SANTORO
-            </span>
-          </div>
-
-          {/* Desktop Links */}
-          <div className="hidden md:flex items-center space-x-8 text-sm font-medium">
-            {navDropdowns.map((group) => (
-              <div
-                key={group.name}
-                className="relative group"
-                tabIndex={0}
-                onMouseEnter={(e) => {
-                  const dropdown = e.currentTarget.querySelector(".dropdown-menu");
-                  if (dropdown) dropdown.classList.add("show");
-                }}
-                onMouseLeave={(e) => {
-                  const dropdown = e.currentTarget.querySelector(".dropdown-menu");
-                  if (dropdown) dropdown.classList.remove("show");
-                }}
-              >
-                <button
-                  className="flex items-center gap-1 hover:text-blue-600 transition-colors cursor-pointer focus:outline-none"
-                  style={{ cursor: "pointer" }}
-                  tabIndex={-1}
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  {group.name}
-                  <ChevronRight
-                    size={14}
-                    className="rotate-90 group-hover:translate-y-[1px] transition-transform"
-                  />
-                </button>
-                <div
-                  className="dropdown-menu pointer-events-none opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200 absolute left-0 top-8 w-44 rounded-xl border border-gray-100 bg-white shadow-xl p-2 z-50"
-                  style={{ pointerEvents: "auto" }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.classList.add("show");
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.classList.remove("show");
-                  }}
-                >
-                  {group.items.map((item) => (
-                    <a
-                      key={item.name}
-                      href={item.href}
-                      className="block rounded-lg px-3 py-2 text-sm hover:bg-gray-50 hover:text-blue-600 transition-colors cursor-pointer"
-                      style={{ cursor: "pointer" }}
-                      target={item.target || undefined}
-                      rel={
-                        item.target === "_blank" ? "noopener noreferrer" : undefined
-                      }
-                    >
-                      {item.name}
-                    </a>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="flex items-center gap-2 md:gap-4">
-            <button
-              onClick={() => redirectToWhatsapp("Sin selección", "$0")}
-              className="cursor-pointer hidden sm:block bg-black text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-gray-800 transition-all active:scale-95 shadow-lg shadow-gray-200"
-            >
-              WhatsApp
-            </button>
-            <button
-              className="p-2 md:hidden"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="md:hidden bg-white border-b border-gray-100 absolute w-full left-0 animate-fade-in">
-            <div className="flex flex-col p-6 space-y-4">
-              {navDropdowns.map((group) => (
-                <div key={group.name} className="border-b border-gray-50 pb-2">
-                  <button
-                    onClick={() =>
-                      setOpenMobileDropdown((prev) =>
-                        prev === group.id ? null : group.id,
-                      )
-                    }
-                    className="w-full flex items-center justify-between text-lg font-medium py-1"
-                  >
-                    {group.name}
-                    <ChevronRight
-                      size={18}
-                      className={`transition-transform ${
-                        openMobileDropdown === group.id ? "rotate-90" : ""
-                      }`}
-                    />
-                  </button>
-                  {openMobileDropdown === group.id && (
-                    <div className="mt-2 pl-3 flex flex-col gap-2">
-                      {group.items.map((item) => (
-                        <a
-                          key={item.name}
-                          href={item.href}
-                          onClick={() => {
-                            setIsMenuOpen(false);
-                            setOpenMobileDropdown(null);
-                          }}
-                          className="text-base text-gray-700 py-1"
-                          target={item.target || undefined}
-                          rel={
-                            item.target === "_blank"
-                              ? "noopener noreferrer"
-                              : undefined
-                          }
-                        >
-                          {item.name}
-                        </a>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
-
-              <button
-                onClick={() => redirectToWhatsapp("Sin selección", "$0")}
-                className="bg-black text-white w-full py-4 rounded-2xl font-bold"
-              >
-                WhatsApp
-              </button>
-            </div>
-          </div>
-        )}
-      </nav>
+      <SiteNavbar isHome />
 
       {/* Video Home - Full width, loop, responsive */}
       <div className="w-full h-[100dvh] md:h-screen overflow-hidden relative">
@@ -379,61 +311,199 @@ const App = () => {
           }}
         />
       </div>
-      {/* Hero Section */}
-      <section className="relative pt-28 md:pt-44 pb-16 md:pb-32 overflow-hidden px-4">
-        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-8 md:gap-12 items-center">
-          <div className="z-10 animate-fade-in-up text-center md:text-left">
-            <h2 className="text-blue-600 font-bold tracking-widest uppercase text-[10px] md:text-xs mb-4">
-              SANTORO EXCLUSIVE - TECNOLOGÍA BOGOTÁ
-            </h2>
-            <div className="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight mb-6 leading-[1.1]">
-              Sonido Puro <br />
-              <span className="text-gray-400">Estilo Atemporal</span>
-            </div>
-            <p className="text-lg md:text-xl text-gray-500 mb-8 md:mb-10 max-w-lg mx-auto md:mx-0">
-              Tecnología curada por expertos. Tu tienda de confianza para AirPods,
-              Watchs y accesorios en Colombia.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start px-4 sm:px-0">
-              <a
-                href="#nosotros"
-                className="cursor-pointer bg-black text-white px-8 py-4 rounded-full font-bold flex items-center justify-center gap-2 group hover:gap-4 transition-all"
-              >
-                Quienes somos <ChevronRight size={20} />
-              </a>
-            </div>
-          </div>
-          <div className="relative mt-12 md:mt-0">
-            <div className="relative w-full h-full">
-              <img
-                src="/firma.png"
-                alt="AirPods y Watch"
-                className="object-contain w-full h-full select-none pointer-events-none animate-watch-bounce"
-                draggable="false"
-              />
-            </div>
 
-            <svg
-              viewBox="0 0 200 200"
-              xmlns="http://www.w3.org/2000/svg"
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 w-full h-full opacity-10 scale-125 sm:scale-150 text-gray-400"
-            >
-              <path
-                fill="currentColor"
-                d="M44.7,-76.4C58.1,-69.2,69.2,-58.1,76.4,-44.7C83.7,-31.3,87.1,-15.7,85.6,-0.9C84,14,77.5,27.9,68.9,40.1C60.3,52.3,49.5,62.8,36.9,69.5C24.3,76.2,9.9,79.1,-4,86C-17.9,92.9,-35.8,103.8,-50.2,100.2C-64.6,96.6,-75.5,78.5,-82.7,60.9C-89.9,43.3,-93.4,26.2,-91.1,10.1C-88.8,-6.1,-80.7,-21.3,-71.4,-34.7C-62.1,-48.1,-51.6,-59.7,-39,-67.4C-26.4,-75.1,-11.7,-78.9,2.1,-82.5C15.9,-86.1,29.8,-83.6,44.7,-76.4Z"
-                transform="translate(100 100)"
-              />
-            </svg>
+      <section className="relative py-14 md:py-20 px-4 bg-gradient-to-b from-[#f5f5f7] to-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-8 md:mb-12">
+            <span className="inline-flex items-center gap-2 rounded-full bg-black text-white px-4 py-2 text-xs md:text-sm font-bold tracking-wider uppercase">
+              Catálogo Santoro
+            </span>
+            <h2 className="mt-4 text-3xl md:text-5xl font-black tracking-tight text-[#101010]">
+              Elige hoy, recibe hoy
+            </h2>
+            <p className="mt-3 text-base md:text-lg text-gray-600 max-w-2xl mx-auto">
+              Selecciona tu favorito y pide por WhatsApp en segundos. Todos con
+              entrega inmediata y pago contra entrega.
+            </p>
           </div>
+
+          {isCatalogSlider ? (
+            <div className="max-w-7xl mx-auto">
+              <div className="overflow-hidden">
+                <div
+                  className="flex transition-transform duration-500 ease-out"
+                  style={{ transform: `translateX(-${safeCatalogPage * 100}%)` }}
+                >
+                  {catalogPages.map((catalogPageItems, pageIndex) => (
+                    <div
+                      key={`catalog-page-${pageIndex}`}
+                      className="w-full shrink-0 px-1"
+                    >
+                      <div className="flex flex-col md:flex-row md:flex-wrap md:items-stretch md:justify-center gap-5 md:gap-6">
+                        {catalogPageItems.map((product, productIndex) => (
+                          <article
+                            key={`${product.id}-${pageIndex}-${productIndex}`}
+                            className="h-full min-h-[560px] md:min-h-[610px] w-full md:flex-none md:w-[calc((100%-3rem)/3)] rounded-3xl border border-gray-200 bg-white p-12  transition-shadow flex flex-col justify-between"
+                          >
+                            <div className="flex-1">
+                              <h3 className="text-xl md:text-2xl font-extrabold leading-tight text-black">
+                                {product.name}
+                              </h3>
+
+                              <p className="mt-4 text-2xl font-black text-emerald-700">
+                                {product.price}
+                              </p>
+                              <p className="mt-2 text-sm font-semibold text-gray-600">
+                                {product.delivery}
+                              </p>
+
+                              <ul className="mt-5 space-y-2.5 text-sm text-gray-800">
+                                {product.benefits.map((benefit) => (
+                                  <li
+                                    key={benefit}
+                                    className="flex items-start gap-2 leading-relaxed"
+                                  >
+                                    <CheckCircle2
+                                      size={16}
+                                      className="mt-0.5 text-emerald-600 shrink-0"
+                                    />
+                                    <span>{benefit}</span>
+                                  </li>
+                                ))}
+                              </ul>
+
+                              <p className="mt-5 text-sm text-gray-700 font-medium">
+                                {product.pitch}
+                              </p>
+                            </div>
+
+                            <div className="mt-6">
+                              <a
+                                href={`#${product.anchorId}`}
+                                className="flex w-full items-center justify-center rounded-2xl border border-gray-300 bg-white py-3 px-4 text-sm font-extrabold text-gray-800 hover:bg-gray-100 transition-colors"
+                              >
+                                Ver más detalles
+                              </a>
+
+                              <button
+                                onClick={() =>
+                                  redirectToWhatsapp(
+                                    product.whatsappName,
+                                    product.detailPrice,
+                                  )
+                                }
+                                className="cursor-pointer mt-3 w-full rounded-2xl bg-black text-white py-3.5 px-4 text-sm font-extrabold tracking-wide hover:bg-neutral-800 active:scale-[0.99] active:!bg-green-500 active:text-white transition-all"
+                              >
+                                {product.ctaLabel}
+                              </button>
+                            </div>
+                          </article>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-6 flex items-center justify-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => goToCatalogPage(safeCatalogPage - 1)}
+                  className="cursor-pointer rounded-full border border-gray-300 bg-white p-2.5 text-gray-700 hover:bg-gray-100"
+                  aria-label="Página anterior"
+                >
+                  <ChevronRight size={16} className="rotate-180" />
+                </button>
+                {catalogPages.map((_, index) => (
+                  <button
+                    key={`catalog-page-dot-${index}`}
+                    type="button"
+                    aria-label={`Ir a la página ${index + 1}`}
+                    onClick={() => goToCatalogPage(index)}
+                    className={`h-2.5 w-2.5 rounded-full transition-all ${
+                      index === safeCatalogPage ? "bg-black w-6" : "bg-gray-300"
+                    }`}
+                  />
+                ))}
+                <button
+                  type="button"
+                  onClick={() => goToCatalogPage(safeCatalogPage + 1)}
+                  className="cursor-pointer rounded-full border border-gray-300 bg-white p-2.5 text-gray-700 hover:bg-gray-100"
+                  aria-label="Página siguiente"
+                >
+                  <ChevronRight size={16} />
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 md:gap-6">
+              {PRODUCTS.map((product) => (
+                <article
+                  key={product.id}
+                  className="h-full min-h-[560px] md:min-h-[620px] rounded-3xl border border-gray-200 bg-white p-6 shadow-[0_15px_45px_-30px_rgba(0,0,0,0.45)] hover:shadow-[0_20px_55px_-30px_rgba(0,0,0,0.55)] transition-shadow flex flex-col justify-between"
+                >
+                  <div className="flex-1">
+                    <h3 className="text-xl md:text-2xl font-extrabold leading-tight text-black">
+                      {product.name}
+                    </h3>
+
+                    <p className="mt-4 text-2xl font-black text-emerald-700">
+                      {product.price}
+                    </p>
+                    <p className="mt-2 text-sm font-semibold text-gray-600">
+                      {product.delivery}
+                    </p>
+
+                    <ul className="mt-5 space-y-2.5 text-sm text-gray-800">
+                      {product.benefits.map((benefit) => (
+                        <li
+                          key={benefit}
+                          className="flex items-start gap-2 leading-relaxed"
+                        >
+                          <CheckCircle2
+                            size={16}
+                            className="mt-0.5 text-emerald-600 shrink-0"
+                          />
+                          <span>{benefit}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    <p className="mt-5 text-sm text-gray-700 font-medium">
+                      {product.pitch}
+                    </p>
+                  </div>
+
+                  <div className="mt-6">
+                    <a
+                      href={`#${product.anchorId}`}
+                      className="flex w-full items-center justify-center rounded-2xl border border-gray-300 bg-white py-3 px-4 text-sm font-extrabold text-gray-800 hover:bg-gray-100 transition-colors"
+                    >
+                      Ver más detalles
+                    </a>
+
+                    <button
+                      onClick={() =>
+                        redirectToWhatsapp(product.whatsappName, product.detailPrice)
+                      }
+                      className="cursor-pointer mt-3 w-full rounded-2xl bg-black text-white py-3.5 px-4 text-sm font-extrabold tracking-wide hover:bg-neutral-800 active:scale-[0.99] active:!bg-green-500 active:text-white transition-all"
+                    >
+                      {product.ctaLabel}
+                    </button>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
       {/* NUEVA SECCIÓN: AirPods Pro 3 (EXCLUSIVOS) */}
       <section
         id="airpods-pro-3"
-        className="py-16 md:py-32 bg-black text-white overflow-hidden"
+        className="py-12 md:py-20 bg-black text-white overflow-hidden"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row items-center gap-10 md:gap-20">
+        <div className="max-w-[90rem] mx-auto px-4 sm:px-6 flex flex-col md:flex-row items-center gap-8 md:gap-14">
           <div className="w-full md:flex-1">
             <div className="relative group max-w-sm mx-auto md:max-w-none">
               <div className="absolute inset-0 bg-blue-500/10 blur-[120px] rounded-full"></div>
@@ -471,16 +541,13 @@ const App = () => {
             </div>
           </div>
           <div className="w-full md:flex-1 text-center md:text-left">
-            <span className="inline-block px-4 py-1 rounded-full border border-blue-500 text-blue-400 font-bold text-xs md:text-sm tracking-widest uppercase mb-6">
+            <span className="inline-block px-4 py-1 rounded-full border border-blue-500 text-blue-400 font-bold text-xs md:text-sm tracking-widest uppercase mb-2">
               Lanzamiento Exclusivo
             </span>
-            <h2 className="text-4xl md:text-7xl font-bold mb-6 text-white leading-tight">
-              AIRPODS PRO 3 <br />
-              <span className="block text-2xl md:text-4xl font-semibold text-gray-300 mt-2">
-                Sonido Premium
-              </span>
+            <h2 className="text-4xl md:text-6xl font-bold mb-2 text-white leading-tight">
+              AIRPODS PRO 3
             </h2>
-            <p className="text-lg md:text-2xl text-neutral-400 mb-10 max-w-lg mx-auto md:mx-0">
+            <p className="text-lg md:text-xl text-neutral-400 mb-10 max-w-lg mx-auto md:mx-0">
               Cancelación de ruido 2.0 para una experiencia que no habías escuchado
               antes.
             </p>
@@ -495,13 +562,13 @@ const App = () => {
                 <div className="p-2 bg-neutral-800 rounded-lg">
                   <Zap size={20} className="text-yellow-500" />
                 </div>
-                <span className="text-sm font-medium">Carga rapida</span>
+                <span className="text-sm font-medium">Carga rápida</span>
               </div>
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-neutral-800 rounded-lg">
                   <Shield size={20} className="text-green-500" />
                 </div>
-                <span className="text-sm font-medium">Garantía 6 meses</span>
+                <span className="text-sm font-medium">Garantía 3 meses</span>
               </div>
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-neutral-800 rounded-lg">
@@ -510,18 +577,17 @@ const App = () => {
                 <span className="text-sm font-medium">Sonido VIP</span>
               </div>
             </div>
-            <div className="mb-2">
-              <span className="inline-block bg-green-100 text-green-800 font-bold px-4 py-1 rounded-full text-base md:text-lg">
-                $140.000 COP
-              </span>
-            </div>
+
             <button
               onClick={() => {
-                redirectToWhatsapp("AirPods Pro 3", "$140.000 COP");
+                redirectToWhatsapp(
+                  pro3Product?.whatsappName ?? "AirPods Pro 3",
+                  pro3Product?.detailPrice ?? "$140.000 COP",
+                );
               }}
-              className="cursor-pointer w-full sm:w-auto bg-white text-black px-12 py-5 rounded-full font-black text-lg hover:bg-neutral-200 active:bg-green-500 active:text-white transition-all transform hover:scale-105 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
+              className="cursor-pointer w-full sm:w-auto bg-white text-black px-10 py-3 rounded-2xl border font-black text-lg hover:bg-neutral-200 active:bg-green-500 active:text-white transition-all transform hover:scale-105 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
             >
-              Comprar AirPods Pro 3
+              {pro3Product?.ctaLabel ?? "Comprar AirPods Pro 3"}
             </button>
           </div>
         </div>
@@ -530,14 +596,14 @@ const App = () => {
       {/* NUEVA SECCIÓN: Diademas Magnético Pro Max */}
       <section
         id="airpods-max"
-        className="py-16 md:py-28 bg-gray-50 overflow-hidden"
+        className="py-12 md:py-20 bg-gray-50 overflow-hidden"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="max-w-[90rem] mx-auto px-4 sm:px-6">
           <div className="text-center mb-0">
             <span className="text-blue-600 font-bold tracking-[0.2em] uppercase text-sm mb-4 block">
               La máxima expresión del sonido
             </span>
-            <h2 className="text-5xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-b from-gray-400 to-black uppercase tracking-tighter">
+            <h2 className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-gray-400 to-black uppercase tracking-tighter">
               AirPods Max
             </h2>
             <p className="text-gray-500 text-lg md:text-xl mt-4 font-medium max-w-2xl mx-auto">
@@ -547,7 +613,7 @@ const App = () => {
           </div>
 
           <div className="flex flex-col md:flex-row items-center gap-12 lg:gap-0">
-            <div className="w-full md:w-[35%] order-2 md:order-1">
+            <div className="w-full md:w-[40%] order-2 md:order-1">
               <div className="space-y-8">
                 <div className="flex gap-4 items-start p-4 bg-white rounded-2xl shadow-sm border border-gray-100 transition-hover hover:shadow-md">
                   <div className="bg-black text-white p-4 rounded-2xl">
@@ -616,7 +682,7 @@ const App = () => {
               </div>
             </div>
 
-            <div className="w-full md:w-[65%] order-1 md:order-2">
+            <div className="w-full md:w-[60%] order-1 md:order-2">
               <div className="relative group">
                 {/* Representación visual artística de los auriculares de diadema */}
                 <div className="order-1 md:order-2 flex justify-center items-center relative">
@@ -644,36 +710,22 @@ const App = () => {
                     />
                   </div>
                 </div>
-                {/* Badge de Precio o Acción */}
-                <div className="absolute -bottom-0 -right-6 bg-white p-6 rounded-[2rem] shadow-2xl border border-gray-100 -rotate-2 flex flex-col items-center scale-[0.8] md:scale-100">
-                  <span className="block text-blue-600 text-[10px] font-black uppercase tracking-tighter mb-1">
-                    Oferta Bogotá
-                  </span>
-                  <span className="text-3xl font-black text-black leading-none">
-                    $150.000 COP
-                  </span>
-                  <span className="text-[10px] text-gray-400 font-bold mt-1">
-                    Envío Hoy
-                  </span>
-                </div>
               </div>
             </div>
           </div>
 
-          <div className="mt-15 text-center">
+          <div className="mt-10 md:mt-3 text-center">
             <div className="inline-flex flex-col items-center">
-              <div className="mb-2">
-                <span className="inline-block bg-green-100 text-green-800 font-bold px-4 py-1 rounded-full text-base md:text-lg">
-                  $150.000 COP
-                </span>
-              </div>
               <button
                 onClick={() => {
-                  redirectToWhatsapp("Magnético Pro Max", "$150.000 COP");
+                  redirectToWhatsapp(
+                    maxProduct?.whatsappName ?? "AirPods Max",
+                    maxProduct?.detailPrice ?? "$150.000 COP",
+                  );
                 }}
-                className="cursor-pointer bg-black text-white px-20 py-6 rounded-[2rem] font-bold hover:bg-neutral-800 active:bg-green-500 active:text-white transition-all text-xl shadow-2xl flex items-center gap-4 group transform hover:scale-105"
+                className="cursor-pointer w-full sm:w-auto bg-black text-white px-12 py-4 rounded-full font-bold hover:bg-neutral-800 active:bg-green-500 active:text-white transition-all text-lg shadow-2xl flex items-center gap-3 group transform hover:scale-105"
               >
-                Comprar AirPods Max
+                {maxProduct?.ctaLabel ?? "Comprar AirPods Max"}
                 <div className="bg-blue-600 rounded-full p-1 group-hover:rotate-12 transition-transform">
                   <Zap size={18} className="fill-white text-white" />
                 </div>
@@ -735,9 +787,9 @@ const App = () => {
       {/* Product Highlight: AirPods Pro 2 */}
       <section
         id="airpods-pro"
-        className="py-16 md:py-24 bg-[#000] text-white overflow-hidden"
+        className="py-10 md:py-15 bg-[#000] text-white overflow-hidden"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row items-center gap-10 md:gap-16">
+        <div className="max-w-[90rem] mx-auto px-4 sm:px-6 flex flex-col md:flex-row items-center gap-8 md:gap-12">
           <div className="w-full md:flex-1 order-2 md:order-1">
             <div className="w-full md:flex-1">
               <div className="relative w-full h-full">
@@ -760,16 +812,19 @@ const App = () => {
             </div>
           </div>
           <div className="w-full md:flex-1 order-1 md:order-2 text-center md:text-left">
-            <span className="text-blue-400 font-semibold text-sm md:text-lg tracking-wider">
+            <span className="inline-block px-4 py-1 rounded-full border border-blue-500 text-blue-400 font-bold text-xs md:text-sm tracking-widest uppercase mb-2">
               Inmersión absoluta
             </span>
-            <h2 className="text-3xl md:text-6xl font-bold mb-6 mt-2 leading-tight">
+            <h2 className="text-4xl md:text-6xl font-bold mb-2 leading-tight">
               AIRPODS PRO 2
             </h2>
+            <p className="text-lg md:text-xl text-neutral-400 mb-8 max-w-lg mx-auto md:mx-0">
+              Cancelación de ruido y nitidez premium para tu rutina diaria.
+            </p>
             <ul className="space-y-4 md:space-y-6 text-left max-w-md mx-auto md:mx-0">
               <li className="flex items-start gap-4">
-                <div className="bg-zinc-800 p-2 rounded-lg mt-1 shrink-0">
-                  <Zap size={20} className="text-blue-400" />
+                <div className="bg-zinc-800 p-2 rounded-lg shrink-0">
+                  <Zap size={20} className="text-yellow-400" />
                 </div>
                 <div>
                   <h4 className="font-bold text-lg md:text-xl">
@@ -782,7 +837,7 @@ const App = () => {
               </li>
               <li className="flex items-start gap-4">
                 <div className="bg-zinc-800 p-2 rounded-lg mt-1 shrink-0">
-                  <Battery size={20} className="text-blue-400" />
+                  <Battery size={20} className="text-green-400" />
                 </div>
                 <div>
                   <h4 className="font-bold text-lg md:text-xl">
@@ -794,18 +849,17 @@ const App = () => {
                 </div>
               </li>
             </ul>
-            <div className="mt-15">
-              <span className="inline-block bg-green-100 text-green-800 font-bold px-4 py-1 rounded-full text-base md:text-lg">
-                $85.000 COP
-              </span>
-            </div>
+
             <button
               onClick={() => {
-                redirectToWhatsapp("AirPods Pro 2", "$85.000 COP");
+                redirectToWhatsapp(
+                  pro2Product?.whatsappName ?? "AirPods Pro 2",
+                  pro2Product?.detailPrice ?? "$100.000 COP",
+                );
               }}
-              className="cursor-pointer mt-5 md:mt-2 w-full sm:w-auto bg-white text-black px-10 py-4 rounded-full font-bold hover:bg-zinc-200 transition-all transform hover:scale-105 active:bg-green-500 active:text-white "
+              className="cursor-pointer mt-6 w-full sm:w-auto bg-white text-black px-10 py-3 rounded-2xl border font-black text-lg hover:bg-neutral-200 active:bg-green-500 active:text-white transition-all transform hover:scale-105 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
             >
-              Comprar AirPods Pro 2
+              {pro2Product?.ctaLabel ?? "Comprar AirPods Pro 2"}
             </button>
           </div>
         </div>
@@ -814,15 +868,15 @@ const App = () => {
       {/* AirPods 4 */}
       <section
         id="airpods-4"
-        className="py-16 md:py-24 bg-white overflow-hidden border-b border-gray-100"
+        className="py-12 md:py-20 bg-white overflow-hidden border-b border-gray-100"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row-reverse items-center gap-10 md:gap-16">
+        <div className="max-w-[90rem] mx-auto px-4 sm:px-6 flex flex-col md:flex-row-reverse items-center gap-8 md:gap-12">
           <div className="w-full md:flex-1">
             <div className="relative w-full h-full">
               <img
                 src="/serie-4.png"
                 alt="AirPods y Watch"
-                className="object-contain w-full h-full select-none pointer-events-none animate-watch-bounce"
+                className="object-contain w-[80%] h-[8  0%] mx-auto select-none pointer-events-none animate-watch-bounce"
                 draggable="false"
               />
               {/* Hotspots */}
@@ -837,13 +891,13 @@ const App = () => {
             </div>
           </div>
           <div className="w-full md:flex-1 text-center md:text-left">
-            <span className="text-gray-400 font-semibold text-sm md:text-lg tracking-wider uppercase">
+            <span className="inline-block px-4 py-1 rounded-full border border-blue-500 text-blue-600 font-bold text-xs md:text-sm tracking-widest uppercase mb-2">
               Ajuste icónico - Sonido épico
             </span>
-            <h2 className="text-3xl md:text-6xl font-bold mb-6 mt-2 text-black">
+            <h2 className="text-4xl md:text-6xl font-bold mb-2 text-black leading-tight">
               AIRPODS GEN 4
             </h2>
-            <p className="text-base md:text-xl text-gray-500 mb-8 max-w-md mx-auto md:mx-0">
+            <p className="text-lg md:text-xl text-gray-500 mb-8 max-w-lg mx-auto md:mx-0">
               Rediseñados para una comodidad inigualable. La referencia preferido por
               los Colombianos.
             </p>
@@ -862,27 +916,26 @@ const App = () => {
                 </span>
               </div>
             </div>
-            <div className="mb-3 mt-15">
-              <span className="inline-block bg-green-100 text-green-800 font-bold px-4 py-1 rounded-full text-base md:text-lg">
-                $95.000 COP
-              </span>
-            </div>
+
             <button
               onClick={() => {
-                redirectToWhatsapp("AirPods 4", "$95.000 COP");
+                redirectToWhatsapp(
+                  airpods4Product?.whatsappName ?? "AirPods Serie 4",
+                  airpods4Product?.detailPrice ?? "$90.000 COP",
+                );
               }}
-              className="cursor-pointer w-full sm:w-auto bg-black text-white px-10 py-4 rounded-full font-bold hover:opacity-80 transition-all shadow-lg transform hover:scale-105 active:bg-green-500 active:text-white "
+              className="cursor-pointer mt-6 w-full sm:w-auto bg-black text-white px-10 py-3 rounded-2xl border border-black font-black text-lg hover:bg-neutral-800 transition-all shadow-lg transform hover:scale-105 active:bg-green-500 active:text-white"
             >
-              Comprar AirPods 4
+              {airpods4Product?.ctaLabel ?? "Comprar AirPods Serie 4"}
             </button>
           </div>
         </div>
       </section>
 
       {/* NUEVA SECCIÓN: Beneficios */}
-      <section className="py-20 bg-white pb-30">
+      <section className="py-14 md:py-16 bg-white pb-20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+          <div className="mt-1 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <div className="p-6 rounded-2xl bg-gray-50">
               <Shield className="mx-auto mb-4 text-green-500" size={32} />
               <h4 className="font-bold mb-2">Garantía Local</h4>
@@ -949,105 +1002,58 @@ const App = () => {
         </div>
       </section> */}
 
-      {/* Quiénes Somos */}
-      <section
-        id="nosotros"
-        className="py-16 md:py-24 bg-zinc-900 text-white overflow-hidden"
-      >
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-800 rounded-full mb-6 md:mb-8">
-            <Code2 size={16} className="text-blue-400" />
-            <span className="text-[10px] font-bold uppercase tracking-widest">
-              SANTORO: Nuestra esencia
-            </span>
-          </div>
-          <h2 className="text-3xl md:text-6xl font-extrabold mb-6 md:mb-8 leading-tight">
-            Ingenieros con <br />
-            <span className="bg-gradient-to-r from-blue-400 to-indigo-500 bg-clip-text text-transparent">
-              Amor por la Tecnología.
-            </span>
-          </h2>
-          <p className="text-base md:text-xl text-zinc-400 leading-relaxed mb-10 md:mb-12">
-            Nacimos como desarrolladores de software con una obsesión: buscar lo
-            mejor en AirPods y Apple Watch para Colombia. En SANTORO curamos
-            experiencias tecnológicas que nosotros mismos usaríamos.
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 text-left">
-            {[
-              {
-                icon: <Heart className="text-red-400" />,
-                title: "Pasión Pura",
-                desc: "Amamos cada línea de código y cada circuito bien diseñado.",
-              },
-              {
-                icon: <Rocket className="text-blue-400" />,
-                title: "Visión 1.1",
-                desc: "Solo traemos productos premium que superan nuestros estándares.",
-              },
-              {
-                icon: <ShieldCheck className="text-green-400" />,
-                title: "Compromiso Real",
-                desc: "Elevando el estilo de vida digital en Colombia.",
-              },
-            ].map((card, i) => (
-              <div
-                key={i}
-                className="p-6 md:p-8 bg-zinc-800/50 rounded-2xl md:rounded-3xl border border-zinc-700/50 hover:bg-zinc-800 transition-colors"
-              >
-                <div className="mb-4">{card.icon}</div>
-                <h4 className="text-lg md:text-xl font-bold mb-2">{card.title}</h4>
-                <p className="text-zinc-500 text-xs md:text-sm">{card.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* NEW SECTION: Apple Watch Series 10 */}
       <section
         id="watch-10"
-        className="py-16 md:py-24 bg-gradient-to-b from-[#f5f5f7] to-white overflow-hidden"
+        className="py-12 md:py-0 bg-gradient-to-b from-[#f5f5f7] to-white overflow-hiddenpd-200 mt-20"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="text-center mb-16">
-            <span className="text-black font-semibold text-sm md:text-lg tracking-widest uppercase">
+        <div className="max-w-[90rem] mx-auto px-4 sm:px-6">
+          <div className="text-center mb-5 md:mb-6">
+            <span className="inline-block px-4 py-1 rounded-full border border-blue-500 text-blue-600 font-bold text-xs md:text-sm tracking-widest uppercase">
               Más delgado <span className="text-gray-400">Y más brillante</span>
             </span>
-            <h2 className="text-4xl md:text-7xl font-extrabold mt-4 mb-6 tracking-tight">
+            <h2 className="text-4xl md:text-6xl font-bold mt-2 mb-2 tracking-tight">
               WATCH SERIE 10
             </h2>
+            <p className="text-lg md:text-xl text-gray-500 max-w-2xl mx-auto">
+              Diseño premium, métricas de salud avanzadas y batería para acompañarte
+              todo el día.
+            </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="order-2 md:order-1 space-y-8">
-              <div className="p-8 bg-white rounded-[2.5rem] shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-                <Monitor className="text-blue-500 mb-4" size={32} />
-                <h3 className="text-2xl font-bold mb-2">Pantalla OLED Ampliada</h3>
+          <div className="grid md:grid-cols-2 gap-8 md:gap-10 items-center">
+            <div className="order-2 md:order-1 space-y-5">
+              <div className="p-6 md:p-7 bg-white rounded-[2.5rem] shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                <div className="mb-3 flex items-start justify-between gap-4">
+                  <h3 className="text-2xl font-bold">Pantalla OLED Ampliada</h3>
+                  <Monitor className="text-blue-500 shrink-0" size={32} />
+                </div>
                 <p className="text-gray-500">
                   Un área de visualización más grande en el diseño más fino jamás
                   creado para un Watch.
                 </p>
               </div>
-              <div className="p-8 bg-white rounded-[2.5rem] shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-                <Activity className="text-red-500 mb-4" size={32} />
-                <h3 className="text-2xl font-bold mb-2">Salud de Vanguardia</h3>
+              <div className="p-6 md:p-7 bg-white rounded-[2.5rem] shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                <div className="mb-3 flex items-start justify-between gap-4">
+                  <h3 className="text-2xl font-bold">Salud de Vanguardia</h3>
+                  <Activity className="text-red-500 shrink-0" size={32} />
+                </div>
                 <p className="text-gray-500">
                   Notificaciones de apnea del sueño y seguimiento avanzado de
                   actividad diaria.
                 </p>
               </div>
-              <div className="mb-3 flex flex-col items-center">
-                <span className="inline-block bg-green-100 text-green-800 font-bold px-4 py-1 rounded-full text-base md:text-lg">
-                  $160.000 COP
-                </span>
-              </div>
+
               <button
                 onClick={() => {
-                  redirectToWhatsapp("Watch Serie 10", "$160.000 COP");
+                  redirectToWhatsapp(
+                    watchProduct?.whatsappName ?? "Apple Watch Serie 10",
+                    watchProduct?.detailPrice ?? "$165.000 COP",
+                  );
                 }}
-                className="cursor-pointer w-full bg-black text-white px-10 py-5 rounded-full font-bold text-lg hover:bg-gray-800 transition-all flex items-center justify-center gap-3 transform hover:scale-105 active:bg-green-500 active:text-white "
+                className="cursor-pointer mt-15 w-full bg-black text-white px-10 py-3 rounded-2xl border border-black font-black text-lg hover:bg-neutral-800 transition-all flex items-center justify-center transform hover:scale-105 active:bg-green-500 active:text-white"
               >
-                Comprar Watch 10 <ChevronRight size={20} />
+                {watchProduct?.ctaLabel ?? "Comprar Watch Serie 10"}
               </button>
             </div>
 
@@ -1081,13 +1087,16 @@ const App = () => {
       </section>
 
       {/* Essentials (Bento Grid) */}
-      <section id="accesorios" className="py-16 md:py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+      <section id="accesorios" className="py-12 md:py-20 bg-white">
+        <div className="max-w-[90rem] mx-auto px-4 sm:px-6">
           <div className="mb-10 md:mb-12 text-center md:text-left">
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tight">
+            <span className="inline-block px-4 py-1 rounded-full border border-blue-500 text-blue-600 font-bold text-xs md:text-sm tracking-widest uppercase mb-2">
+              Línea Premium
+            </span>
+            <h2 className="text-4xl md:text-6xl font-bold tracking-tight leading-tight">
               SANTORO Accesorios
             </h2>
-            <p className="text-gray-500 text-base md:text-lg mt-2">
+            <p className="text-gray-500 text-lg md:text-xl mt-2 max-w-3xl mx-auto md:mx-0">
               Accesorios de calidad para complementar tu experiencia tecnológica.
             </p>
           </div>
@@ -1106,10 +1115,17 @@ const App = () => {
                     Alineación magnética perfecta para tu iPhone en Bogotá.
                   </p>
                 </div>
-
-                {/* <button className="mt-8 bg-white text-black font-bold py-3 px-8 rounded-full w-full sm:w-fit hover:bg-blue-500 hover:text-white transition-all">
-                  Comprar
-                </button> */}
+                <button
+                  onClick={() => {
+                    redirectToWhatsapp(
+                      accessoriesProduct?.whatsappName ?? "Accesorios Premium",
+                      accessoriesProduct?.detailPrice ?? "Precio según referencia",
+                    );
+                  }}
+                  className="cursor-pointer mt-8 w-full sm:w-auto bg-white text-black px-10 py-3 rounded-2xl border font-black text-lg hover:bg-neutral-200 active:bg-green-500 active:text-white transition-all transform hover:scale-105 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
+                >
+                  {accessoriesProduct?.ctaLabel ?? "Cotizar Accesorios"}
+                </button>
               </div>
               <Zap
                 size={200}
@@ -1163,35 +1179,7 @@ const App = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-white py-12 border-t border-zinc-100 px-4">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
-          <div className="text-2xl font-bold tracking-tighter">SANTORO COLOMBIA</div>
-          <div className="flex flex-wrap justify-center gap-6 md:gap-8 text-sm text-zinc-500">
-            <a
-              href="https://www.instagram.com/santorostore.oficial?igsh=MTRvY2FqN3BiazY4MQ%3D%3D&utm_source=qr"
-              target="blank"
-              className="hover:text-black transition-colors"
-            >
-              Instagram
-            </a>
-            <a
-              href="https://www.tiktok.com/@santorostore.oficial?_r=1&_t=ZS-953EhWIXaEx"
-              target="blank"
-              className="hover:text-black transition-colors"
-            >
-              TikTok
-            </a>
-            <a href="#" className="hover:text-black transition-colors">
-              Políticas
-            </a>
-          </div>
-          <div className="text-xs md:text-sm text-zinc-400 text-center md:text-right">
-            SANTORO: Envíos a toda Colombia.
-            <br />© 2024 SANTORO. Developed with ❤️ by Engineers.
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
 
       {/* Styles for Custom Animations */}
       <style
