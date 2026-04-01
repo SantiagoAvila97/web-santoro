@@ -512,12 +512,12 @@ const App = () => {
             </div>
             <div className="mb-2">
               <span className="inline-block bg-green-100 text-green-800 font-bold px-4 py-1 rounded-full text-base md:text-lg">
-                $150.000 COP
+                $140.000 COP
               </span>
             </div>
             <button
               onClick={() => {
-                redirectToWhatsapp("AirPods Pro 3", "$150.000 COP");
+                redirectToWhatsapp("AirPods Pro 3", "$140.000 COP");
               }}
               className="cursor-pointer w-full sm:w-auto bg-white text-black px-12 py-5 rounded-full font-black text-lg hover:bg-neutral-200 active:bg-green-500 active:text-white transition-all transform hover:scale-105 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
             >
@@ -650,7 +650,7 @@ const App = () => {
                     Oferta Bogotá
                   </span>
                   <span className="text-3xl font-black text-black leading-none">
-                    $160.000 COP
+                    $150.000 COP
                   </span>
                   <span className="text-[10px] text-gray-400 font-bold mt-1">
                     Envío Hoy
@@ -664,12 +664,12 @@ const App = () => {
             <div className="inline-flex flex-col items-center">
               <div className="mb-2">
                 <span className="inline-block bg-green-100 text-green-800 font-bold px-4 py-1 rounded-full text-base md:text-lg">
-                  $160.000 COP
+                  $150.000 COP
                 </span>
               </div>
               <button
                 onClick={() => {
-                  redirectToWhatsapp("Magnético Pro Max", "$160.000 COP");
+                  redirectToWhatsapp("Magnético Pro Max", "$150.000 COP");
                 }}
                 className="cursor-pointer bg-black text-white px-20 py-6 rounded-[2rem] font-bold hover:bg-neutral-800 active:bg-green-500 active:text-white transition-all text-xl shadow-2xl flex items-center gap-4 group transform hover:scale-105"
               >
@@ -796,12 +796,12 @@ const App = () => {
             </ul>
             <div className="mt-15">
               <span className="inline-block bg-green-100 text-green-800 font-bold px-4 py-1 rounded-full text-base md:text-lg">
-                $90.000 COP
+                $85.000 COP
               </span>
             </div>
             <button
               onClick={() => {
-                redirectToWhatsapp("AirPods Pro 2", "$90.000 COP");
+                redirectToWhatsapp("AirPods Pro 2", "$85.000 COP");
               }}
               className="cursor-pointer mt-5 md:mt-2 w-full sm:w-auto bg-white text-black px-10 py-4 rounded-full font-bold hover:bg-zinc-200 transition-all transform hover:scale-105 active:bg-green-500 active:text-white "
             >
@@ -864,12 +864,12 @@ const App = () => {
             </div>
             <div className="mb-3 mt-15">
               <span className="inline-block bg-green-100 text-green-800 font-bold px-4 py-1 rounded-full text-base md:text-lg">
-                $110.000 COP
+                $95.000 COP
               </span>
             </div>
             <button
               onClick={() => {
-                redirectToWhatsapp("AirPods 4", "$110.000 COP");
+                redirectToWhatsapp("AirPods 4", "$95.000 COP");
               }}
               className="cursor-pointer w-full sm:w-auto bg-black text-white px-10 py-4 rounded-full font-bold hover:opacity-80 transition-all shadow-lg transform hover:scale-105 active:bg-green-500 active:text-white "
             >
@@ -1041,7 +1041,12 @@ const App = () => {
                   $160.000 COP
                 </span>
               </div>
-              <button className="cursor-pointer w-full bg-black text-white px-10 py-5 rounded-full font-bold text-lg hover:bg-gray-800 transition-all flex items-center justify-center gap-3 transform hover:scale-105 active:bg-green-500 active:text-white ">
+              <button
+                onClick={() => {
+                  redirectToWhatsapp("Watch Serie 10", "$160.000 COP");
+                }}
+                className="cursor-pointer w-full bg-black text-white px-10 py-5 rounded-full font-bold text-lg hover:bg-gray-800 transition-all flex items-center justify-center gap-3 transform hover:scale-105 active:bg-green-500 active:text-white "
+              >
                 Comprar Watch 10 <ChevronRight size={20} />
               </button>
             </div>
