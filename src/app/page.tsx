@@ -498,17 +498,29 @@ const App = () => {
               </div>
             </div>
 
-            <button
-              onClick={() => {
-                redirectToWhatsapp(
-                  pro3Product?.whatsappName ?? "AirPods Pro 3",
-                  pro3Product?.detailPrice ?? "$140.000 COP",
-                );
-              }}
-              className="cursor-pointer w-full sm:w-auto bg-white text-black px-10 py-3 rounded-2xl border font-black text-lg hover:bg-neutral-200 active:bg-green-500 active:text-white transition-all transform hover:scale-96 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
-            >
-              {pro3Product?.ctaLabel ?? "Comprar AirPods Pro 3"}
-            </button>
+            <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+              <button
+                onClick={() => {
+                  redirectToWhatsapp(
+                    pro3Product?.whatsappName ?? "AirPods Pro 3",
+                    pro3Product?.detailPrice ?? "$140.000 COP",
+                  );
+                }}
+                className="cursor-pointer w-full sm:w-auto bg-white text-black px-10 py-3 rounded-2xl border font-black text-lg hover:bg-neutral-200 active:bg-green-500 active:text-white transition-all transform hover:scale-96 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
+              >
+                {pro3Product?.ctaLabel ?? "Comprar AirPods Pro 3"}
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  handleAddToCart(pro3Product?.id ?? "catalog-airpods-pro-3")
+                }
+                className="cursor-pointer inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-white bg-transparent px-5 py-3 font-extrabold text-white transition-all hover:bg-white/10 active:scale-[0.98] sm:w-auto"
+                aria-label="Agregar AirPods Pro 3 al carrito"
+              >
+                <ShoppingCart size={18} />
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -636,20 +648,32 @@ const App = () => {
 
           <div className="mt-10 md:mt-3 text-center">
             <div className="inline-flex flex-col items-center">
-              <button
-                onClick={() => {
-                  redirectToWhatsapp(
-                    maxProduct?.whatsappName ?? "AirPods Max",
-                    maxProduct?.detailPrice ?? "$150.000 COP",
-                  );
-                }}
-                className="cursor-pointer w-full sm:w-auto bg-black text-white px-12 py-4 rounded-full font-bold hover:bg-neutral-800 active:bg-green-500 active:text-white transition-all text-lg shadow-2xl flex items-center gap-3 group transform hover:scale-96 rounded-xl"
-              >
-                {maxProduct?.ctaLabel ?? "Comprar AirPods Max"}
-                <div className="bg-blue-600 rounded-full p-1 group-hover:rotate-12 transition-transform">
-                  <Zap size={18} className="fill-white text-white" />
-                </div>
-              </button>
+              <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center sm:justify-center">
+                <button
+                  onClick={() => {
+                    redirectToWhatsapp(
+                      maxProduct?.whatsappName ?? "AirPods Max",
+                      maxProduct?.detailPrice ?? "$150.000 COP",
+                    );
+                  }}
+                  className="cursor-pointer w-full sm:w-auto bg-black text-white px-12 py-4 rounded-full font-bold hover:bg-neutral-800 active:bg-green-500 active:text-white transition-all text-lg shadow-2xl flex items-center gap-3 group transform hover:scale-96 rounded-xl"
+                >
+                  {maxProduct?.ctaLabel ?? "Comprar AirPods Max"}
+                  <div className="bg-blue-600 rounded-full p-1 group-hover:rotate-12 transition-transform">
+                    <Zap size={18} className="fill-white text-white" />
+                  </div>
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleAddToCart(maxProduct?.id ?? "catalog-airpods-max")
+                  }
+                  className="cursor-pointer inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-black bg-transparent px-5 py-5 font-extrabold text-black transition-all hover:bg-black/5 active:scale-[0.98] sm:w-auto"
+                  aria-label="Agregar AirPods Max al carrito"
+                >
+                  <ShoppingCart size={18} />
+                </button>
+              </div>
               <p className="mt-4 text-gray-400 text-sm font-medium italic">
                 Disponibilidad inmediata en tienda online.
               </p>
@@ -770,17 +794,29 @@ const App = () => {
               </li>
             </ul>
 
-            <button
-              onClick={() => {
-                redirectToWhatsapp(
-                  pro2Product?.whatsappName ?? "AirPods Pro 2",
-                  pro2Product?.detailPrice ?? "$100.000 COP",
-                );
-              }}
-              className="cursor-pointer mt-6 w-full sm:w-auto bg-white text-black px-10 py-3 rounded-2xl border font-black text-lg hover:bg-neutral-200 active:bg-green-500 active:text-white transition-all transform hover:scale-96 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
-            >
-              {pro2Product?.ctaLabel ?? "Comprar AirPods Pro 2"}
-            </button>
+            <div className="mt-6 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+              <button
+                onClick={() => {
+                  redirectToWhatsapp(
+                    pro2Product?.whatsappName ?? "AirPods Pro 2",
+                    pro2Product?.detailPrice ?? "$100.000 COP",
+                  );
+                }}
+                className="cursor-pointer w-full sm:w-auto bg-white text-black px-10 py-3 rounded-2xl border font-black text-lg hover:bg-neutral-200 active:bg-green-500 active:text-white transition-all transform hover:scale-96 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
+              >
+                {pro2Product?.ctaLabel ?? "Comprar AirPods Pro 2"}
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  handleAddToCart(pro2Product?.id ?? "catalog-airpods-pro-2")
+                }
+                className="cursor-pointer inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-white bg-transparent px-5 py-3 font-extrabold text-white transition-all hover:bg-white/10 active:scale-[0.98] sm:w-auto"
+                aria-label="Agregar AirPods Pro 2 al carrito"
+              >
+                <ShoppingCart size={18} />
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -837,17 +873,29 @@ const App = () => {
               </div>
             </div>
 
-            <button
-              onClick={() => {
-                redirectToWhatsapp(
-                  airpods4Product?.whatsappName ?? "AirPods Serie 4",
-                  airpods4Product?.detailPrice ?? "$90.000 COP",
-                );
-              }}
-              className="cursor-pointer mt-6 w-full sm:w-auto bg-black text-white px-10 py-3 rounded-2xl border border-black font-black text-lg hover:bg-neutral-800 transition-all shadow-lg transform hover:scale-96 active:bg-green-500 active:text-white"
-            >
-              {airpods4Product?.ctaLabel ?? "Comprar AirPods Serie 4"}
-            </button>
+            <div className="mt-6 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+              <button
+                onClick={() => {
+                  redirectToWhatsapp(
+                    airpods4Product?.whatsappName ?? "AirPods Serie 4",
+                    airpods4Product?.detailPrice ?? "$90.000 COP",
+                  );
+                }}
+                className="cursor-pointer w-full sm:w-auto bg-black text-white px-10 py-3 rounded-2xl border border-black font-black text-lg hover:bg-neutral-800 transition-all shadow-lg transform hover:scale-96 active:bg-green-500 active:text-white"
+              >
+                {airpods4Product?.ctaLabel ?? "Comprar AirPods Serie 4"}
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  handleAddToCart(airpods4Product?.id ?? "catalog-airpods-4-a")
+                }
+                className="cursor-pointer inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-black bg-transparent px-5 py-3 font-extrabold text-black transition-all hover:bg-black/5 active:scale-[0.98] sm:w-auto"
+                aria-label="Agregar AirPods Serie 4 al carrito"
+              >
+                <ShoppingCart size={18} />
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -964,17 +1012,29 @@ const App = () => {
                 </p>
               </div>
 
-              <button
-                onClick={() => {
-                  redirectToWhatsapp(
-                    watchProduct?.whatsappName ?? "Apple Watch Serie 10",
-                    watchProduct?.detailPrice ?? "$165.000 COP",
-                  );
-                }}
-                className="cursor-pointer mt-15 w-full bg-black text-white px-10 py-3 rounded-2xl border border-black font-black text-lg hover:bg-neutral-800 transition-all flex items-center justify-center transform hover:scale-96 active:bg-green-500 active:text-white"
-              >
-                {watchProduct?.ctaLabel ?? "Comprar Watch Serie 10"}
-              </button>
+              <div className="mt-15 flex w-full flex-col gap-3 sm:flex-row">
+                <button
+                  onClick={() => {
+                    redirectToWhatsapp(
+                      watchProduct?.whatsappName ?? "Apple Watch Serie 10",
+                      watchProduct?.detailPrice ?? "$165.000 COP",
+                    );
+                  }}
+                  className="cursor-pointer w-full bg-black text-white px-10 py-3 rounded-2xl border border-black font-black text-lg hover:bg-neutral-800 transition-all flex items-center justify-center transform hover:scale-96 active:bg-green-500 active:text-white"
+                >
+                  {watchProduct?.ctaLabel ?? "Comprar Watch Serie 10"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleAddToCart(watchProduct?.id ?? "catalog-watch-serie-10")
+                  }
+                  className="cursor-pointer inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-black bg-transparent px-5 py-3 font-extrabold text-black transition-all hover:bg-black/5 active:scale-[0.98] sm:w-auto"
+                  aria-label="Agregar Apple Watch Serie 10 al carrito"
+                >
+                  <ShoppingCart size={18} />
+                </button>
+              </div>
             </div>
 
             <div className="order-1 md:order-2 flex justify-center items-center relative">
