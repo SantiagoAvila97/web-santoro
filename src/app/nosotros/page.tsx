@@ -14,15 +14,16 @@ export default function NosotrosPage() {
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-8 md:gap-12 items-center">
           <div className="z-10 animate-fade-in-up text-center md:text-left">
             <h2 className="text-blue-600 font-bold tracking-widest uppercase text-[10px] md:text-xs mb-4">
-              SANTORO EXCLUSIVE - TECNOLOGÍA BOGOTÁ
+              SANTORO EXCLUSIVE - SOBRE NOSOTROS
             </h2>
             <div className="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight mb-6 leading-[1.1]">
-              Sonido Puro <br />
-              <span className="text-gray-400">Estilo Atemporal</span>
+              Tecnología con alma{" "}
+              <span className="text-gray-400">hecha por personas reales</span>
             </div>
             <p className="text-lg md:text-xl text-gray-500 mb-8 md:mb-10 max-w-lg mx-auto md:mx-0">
-              Tecnología curada por expertos. Tu tienda de confianza para AirPods,
-              Watchs y accesorios en Colombia.
+              En Santoro no solo vendemos productos: te acompañamos a elegir lo mejor
+              para tu día a día. Somos un equipo cercano, apasionado por la
+              tecnología, y queremos que compres con confianza en cada pedido.
             </p>
           </div>
           <div className="relative mt-12 md:mt-0">
@@ -111,17 +112,41 @@ export default function NosotrosPage() {
               href="https://www.instagram.com/santorostore.oficial?igsh=MTRvY2FqN3BiazY4MQ%3D%3D&utm_source=qr"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-4 rounded-2xl border border-gray-200 hover:bg-gray-50 transition-colors"
+              aria-label="Instagram de empresa santorostore.oficial"
+              className="w-[170px] p-4 rounded-2xl border border-gray-200 hover:bg-gray-50 transition-colors flex flex-col items-center gap-2"
             >
-              <img src="/instagram.svg" alt="Instagram" className="w-10 h-10" />
+              <img src="/instagram.svg" alt="Instagram empresa" className="w-10 h-10" />
+              <span className="text-[11px] font-semibold text-gray-600">
+                @santorostore.oficial
+              </span>
             </a>
             <a
               href="https://www.tiktok.com/@santorostore.oficial?_r=1&_t=ZS-953EhWIXaEx"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-4 rounded-2xl border border-gray-200 hover:bg-gray-50 transition-colors"
+              aria-label="TikTok de empresa santorostore.oficial"
+              className="w-[170px] p-4 rounded-2xl border border-gray-200 hover:bg-gray-50 transition-colors flex flex-col items-center gap-2"
             >
-              <img src="/tiktok.svg" alt="TikTok" className="w-10 h-10" />
+              <img src="/tiktok.svg" alt="TikTok empresa" className="w-10 h-10" />
+              <span className="text-[11px] font-semibold text-gray-600">
+                @santorostore.oficial
+              </span>
+            </a>
+            <a
+              href="https://www.instagram.com/santi.ap__/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram personal de santi.ap__"
+              className="w-[170px] p-4 rounded-2xl border border-gray-200 hover:bg-gray-50 transition-colors flex flex-col items-center gap-2"
+            >
+              <img
+                src="/instagram.svg"
+                alt="Instagram personal santi.ap__"
+                className="w-10 h-10"
+              />
+              <span className="text-[11px] font-semibold text-gray-600">
+                @santi.ap__
+              </span>
             </a>
           </div>
         </div>

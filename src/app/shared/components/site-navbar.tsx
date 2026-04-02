@@ -3,8 +3,17 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { ChevronRight, Menu, X } from "lucide-react";
+import {
+  ChevronRight,
+  Menu,
+  Minus,
+  Plus,
+  ShoppingCart,
+  Trash2,
+  X,
+} from "lucide-react";
 import { redirectToWhatsapp } from "../functions/whatsapp";
+import { useCart } from "../cart/context";
 
 type NavItem = {
   name: string;
@@ -31,6 +40,9 @@ export function SiteNavbar({ isHome = false }: SiteNavbarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openMobileDropdown, setOpenMobileDropdown] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const { items, totalItems, subtotalLabel, removeItem, increaseQty, decreaseQty } =
+    useCart();
 
   const sectionPrefix = isHome ? "" : "/";
 
@@ -66,6 +78,38 @@ export function SiteNavbar({ isHome = false }: SiteNavbarProps) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    const handleMobileScrollClose = () => {
+      if (window.innerWidth >= 768) return;
+      if (!isMenuOpen && !isCartOpen) return;
+
+      setIsMenuOpen(false);
+      setIsCartOpen(false);
+      setOpenMobileDropdown(null);
+    };
+
+    window.addEventListener("scroll", handleMobileScrollClose, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleMobileScrollClose);
+    };
+  }, [isCartOpen, isMenuOpen]);
+
+  const openCartOnWhatsapp = () => {
+    const summary = items
+      .map(
+        (item) =>
+          `- ${item.product.whatsappName} x${item.quantity} (${item.product.detailPrice})`,
+      )
+      .join("\n");
+
+    redirectToWhatsapp(
+      "Carrito Santoro",
+      subtotalLabel,
+      `Hola Santoro Store 🌐, quiero pedir lo siguiente:\n${summary}\n\nSubtotal estimado: ${subtotalLabel}`,
+    );
+  };
+
   const renderNavItem = (item: NavItem, onClick?: () => void) => {
     if (isInternalRoute(item.href) && item.target !== "_blank") {
       return (
@@ -96,7 +140,7 @@ export function SiteNavbar({ isHome = false }: SiteNavbarProps) {
 
   return (
     <nav
-      className={`fixed w-full z-50 transition-all duration-300 ${scrolled || isMenuOpen ? "bg-white/90 backdrop-blur-md shadow-sm" : "bg-transparent"}`}
+      className={`fixed w-full z-50 transition-all duration-300 ${scrolled || isMenuOpen || isCartOpen ? "bg-white/90 backdrop-blur-md shadow-sm" : "bg-transparent"}`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 md:h-20 flex items-center justify-between">
         {isHome ? (
@@ -190,6 +234,104 @@ export function SiteNavbar({ isHome = false }: SiteNavbarProps) {
         </div>
 
         <div className="flex items-center gap-2 md:gap-4">
+          <div className="relative hidden md:block">
+            <button
+              type="button"
+              onClick={() => setIsCartOpen((prev) => !prev)}
+              className="cursor-pointer relative inline-flex items-center justify-center rounded-full border border-gray-300 bg-white p-2.5 text-gray-900 hover:bg-gray-50"
+              aria-label="Abrir carrito"
+              aria-expanded={isCartOpen}
+            >
+              <ShoppingCart size={18} />
+              {totalItems > 0 && (
+                <span className="absolute -right-1.5 -top-1.5 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-black px-1 text-[10px] font-bold text-white">
+                  {totalItems}
+                </span>
+              )}
+            </button>
+
+            {isCartOpen && (
+              <div className="absolute right-0 top-12 w-[360px] rounded-2xl border border-gray-200 bg-white p-4 shadow-xl">
+                <div className="flex items-center justify-between border-b border-gray-100 pb-3">
+                  <p className="text-sm font-extrabold text-black">Tu carrito</p>
+                  <p className="text-xs font-bold text-gray-500">
+                    {totalItems} items
+                  </p>
+                </div>
+
+                {items.length === 0 ? (
+                  <p className="py-8 text-center text-sm font-medium text-gray-500">
+                    Aun no agregas productos.
+                  </p>
+                ) : (
+                  <div className="max-h-[320px] space-y-3 overflow-auto py-3">
+                    {items.map((item) => (
+                      <div
+                        key={item.productId}
+                        className="rounded-xl border border-gray-100 p-3"
+                      >
+                        <div className="flex items-start justify-between gap-3">
+                          <div>
+                            <p className="text-sm font-bold text-black">
+                              {item.product.name}
+                            </p>
+                            <p className="text-xs font-semibold text-emerald-700">
+                              {item.product.detailPrice}
+                            </p>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => removeItem(item.productId)}
+                            className="cursor-pointer rounded-lg p-1 text-gray-400 hover:bg-red-50 hover:text-red-600"
+                            aria-label={`Quitar ${item.product.name}`}
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
+                        <div className="mt-2 flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => decreaseQty(item.productId)}
+                            className="cursor-pointer rounded-lg border border-gray-200 p-1.5 hover:bg-gray-50"
+                            aria-label={`Disminuir cantidad de ${item.product.name}`}
+                          >
+                            <Minus size={14} />
+                          </button>
+                          <span className="min-w-8 text-center text-sm font-bold">
+                            {item.quantity}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => increaseQty(item.productId)}
+                            className="cursor-pointer rounded-lg border border-gray-200 p-1.5 hover:bg-gray-50"
+                            aria-label={`Aumentar cantidad de ${item.product.name}`}
+                          >
+                            <Plus size={14} />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                <div className="mt-2 border-t border-gray-100 pt-3">
+                  <div className="mb-3 flex items-center justify-between text-sm font-semibold">
+                    <span>Subtotal</span>
+                    <span>{subtotalLabel}</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={openCartOnWhatsapp}
+                    disabled={items.length === 0}
+                    className="cursor-pointer w-full rounded-xl bg-black px-4 py-2.5 text-sm font-extrabold text-white disabled:cursor-not-allowed disabled:bg-gray-300  active:scale-[0.99] active:!bg-green-500 active:text-white"
+                  >
+                    Pedir carrito por WhatsApp
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+
           <button
             onClick={() => redirectToWhatsapp("Sin selección", "$0")}
             className="cursor-pointer hidden sm:block bg-black text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-gray-800 transition-all active:scale-95 shadow-lg shadow-gray-200"
@@ -197,13 +339,100 @@ export function SiteNavbar({ isHome = false }: SiteNavbarProps) {
             WhatsApp
           </button>
           <button
+            type="button"
+            className="cursor-pointer relative rounded-full border border-gray-300 bg-white p-2 md:hidden"
+            onClick={() => {
+              setIsMenuOpen(false);
+              setIsCartOpen((prev) => !prev);
+            }}
+            aria-label="Abrir carrito"
+            aria-expanded={isCartOpen}
+          >
+            <ShoppingCart size={18} />
+            {totalItems > 0 && (
+              <span className="absolute -right-1.5 -top-1.5 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-black px-1 text-[10px] font-bold text-white">
+                {totalItems}
+              </span>
+            )}
+          </button>
+          <button
             className="p-2 md:hidden"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            onClick={() => {
+              setIsCartOpen(false);
+              setIsMenuOpen((prev) => !prev);
+            }}
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
       </div>
+
+      {isCartOpen && !isMenuOpen && (
+        <div className="md:hidden bg-white border-b border-gray-100 absolute w-full left-0 animate-fade-in">
+          <div className="p-4">
+            <div className="rounded-2xl border border-gray-100 p-4">
+              <div className="flex w-full items-center justify-between">
+                <span className="text-base font-bold">Carrito</span>
+                <span className="inline-flex min-w-6 items-center justify-center rounded-full bg-black px-2 py-0.5 text-xs font-bold text-white">
+                  {totalItems}
+                </span>
+              </div>
+
+              <div className="mt-3 space-y-3">
+                {items.length === 0 ? (
+                  <p className="text-sm text-gray-500">Aun no agregas productos.</p>
+                ) : (
+                  items.map((item) => (
+                    <div
+                      key={item.productId}
+                      className="rounded-xl border border-gray-100 p-3"
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <p className="text-sm font-semibold">{item.product.name}</p>
+                        <button
+                          type="button"
+                          onClick={() => removeItem(item.productId)}
+                          className="rounded p-1 text-gray-500 hover:bg-red-50 hover:text-red-600"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
+                      <div className="mt-2 flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => decreaseQty(item.productId)}
+                          className="rounded border border-gray-200 p-1"
+                        >
+                          <Minus size={14} />
+                        </button>
+                        <span className="text-sm font-bold">{item.quantity}</span>
+                        <button
+                          type="button"
+                          onClick={() => increaseQty(item.productId)}
+                          className="rounded border border-gray-200 p-1"
+                        >
+                          <Plus size={14} />
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                )}
+                <div className="pt-2 text-sm font-semibold text-gray-700">
+                  Subtotal: {subtotalLabel}
+                </div>
+                <button
+                  type="button"
+                  onClick={openCartOnWhatsapp}
+                  disabled={items.length === 0}
+                  className="w-full rounded-xl bg-black py-3 text-sm font-bold text-white disabled:cursor-not-allowed disabled:bg-gray-300"
+                >
+                  Pedir carrito por WhatsApp
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {isMenuOpen && (
         <div className="md:hidden bg-white border-b border-gray-100 absolute w-full left-0 animate-fade-in">

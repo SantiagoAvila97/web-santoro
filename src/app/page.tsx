@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   ShoppingCart,
   ChevronRight,
@@ -22,137 +22,17 @@ import { BenefitHotspot } from "./shared/functions/benefit";
 import { redirectToWhatsapp } from "./shared/functions/whatsapp";
 import { SiteNavbar } from "./shared/components/site-navbar";
 import { SiteFooter } from "./shared/components/site-footer";
-
-type ProductCatalogItem = {
-  id: string;
-  anchorId: string;
-  name: string;
-  price: string;
-  detailPrice: string;
-  whatsappName: string;
-  delivery: string;
-  benefits: string[];
-  pitch: string;
-  ctaLabel: string;
-};
-
-const PRODUCTS: ProductCatalogItem[] = [
-  {
-    id: "catalog-airpods-pro-3",
-    anchorId: "airpods-pro-3",
-    name: "✨ AirPods Pro 3",
-    price: "💰 $145.000",
-    detailPrice: "$145.000 COP",
-    whatsappName: "AirPods Pro 3",
-    delivery: "📍 Entrega hoy mismo en Bogotá y pago contra entrega",
-    benefits: [
-      "Cancelación de ruido 2.0",
-      "Chip H3 de última generación",
-      "Audio Lossless Pro",
-      "Carga rápida para todo el día",
-      "Garantía directa Santoro 🔒",
-    ],
-    pitch:
-      "La opción premium para quienes quieren sonar diferente desde el primer uso.",
-    ctaLabel: "Comprar AirPods Pro 3",
-  },
-  {
-    id: "catalog-airpods-max",
-    anchorId: "airpods-max",
-    name: "🎵 AirPods Max",
-    price: "💰 $155.000",
-    detailPrice: "$155.000 COP",
-    whatsappName: "AirPods Max",
-    delivery: "📍 Entrega inmediata y pago contra entrega",
-    benefits: [
-      "Sonido envolvente 360°",
-      "Diseño premium tipo diadema",
-      "Almohadillas cómodas por horas",
-      "Batería de larga duración",
-      "Acople magnético profesional",
-    ],
-    pitch: "Ideales para trabajar, producir o disfrutar música con estilo total.",
-    ctaLabel: "Comprar AirPods Max",
-  },
-  {
-    id: "catalog-airpods-4-a",
-    anchorId: "airpods-4",
-    name: "🚀 AirPods Serie 4",
-    price: "💰 $95.000",
-    detailPrice: "$95.000 COP",
-    whatsappName: "AirPods Serie 4",
-    delivery: "📍 Envío express y pago contra entrega",
-    benefits: [
-      "Sonido claro y potente",
-      "Diseño ligero y cómodo",
-      "Conexión rápida con iPhone y Android",
-      "Excelente opción calidad/precio",
-      "Perfectos para uso diario",
-    ],
-    pitch: "Un best seller para regalar o renovar tus audífonos sin gastar de más.",
-    ctaLabel: "Comprar AirPods Serie 4",
-  },
-  {
-    id: "catalog-airpods-pro-2",
-    anchorId: "airpods-pro",
-    name: "🎧 AirPods Pro 2",
-    price: "💰 $85.000",
-    detailPrice: "$85.000 COP",
-    whatsappName: "AirPods Pro 2",
-    delivery: "📍 Entrega inmediata y pago contra entrega",
-    benefits: [
-      "Cancelación de ruido activa 🔇",
-      "Modo ambiente 🌎",
-      "Excelente calidad de sonido 🎶",
-      "Ajuste cómodo con almohadillas",
-      "Buena duración de batería 🔋",
-    ],
-    pitch: "Perfectos para concentrarte, viajar o usarlos en el gym 👌",
-    ctaLabel: "Comprar AirPods Pro 2",
-  },
-  {
-    id: "catalog-watch-serie-10",
-    anchorId: "watch-10",
-    name: "⌚ Apple Watch Serie 10",
-    price: "💰 $165.000",
-    detailPrice: "$165.000",
-    whatsappName: "Apple Watch Serie 10",
-    delivery: "📍 Entrega inmediata y pago contra entrega",
-    benefits: [
-      "Pantalla OLED amplia y brillante",
-      "Monitoreo avanzado de salud",
-      "Diseño premium ultraligero",
-      "Ideal para deporte y productividad",
-      "Garantía directa Santoro",
-    ],
-    pitch:
-      "El smartwatch ideal para quien busca estilo, rendimiento y salud en una sola pieza.",
-    ctaLabel: "Comprar Watch Serie 10",
-  },
-  {
-    id: "catalog-accesorios-premium",
-    anchorId: "accesorios",
-    name: "🔌 Accesorios Premium",
-    price: "💬 Precio variable",
-    detailPrice: "Precio según referencia",
-    whatsappName: "Accesorios Premium",
-    delivery: "📍 Entrega inmediata y pago contra entrega",
-    benefits: [
-      "Cargadores y cables de alta calidad",
-      "Cases premium para iPhone",
-      "Compatibles con ecosistema Apple",
-      "Stock según referencia consultada",
-      "Asesoría para elegir el accesorio ideal",
-    ],
-    pitch:
-      "Cotiza el accesorio exacto que necesitas y recibe recomendación personalizada.",
-    ctaLabel: "Cotizar Accesorios",
-  },
-];
+import { useCart } from "./shared/cart/context";
+import { PRODUCTS, type ProductCatalogItem } from "./shared/data/products";
 
 const App = () => {
   const [catalogPage, setCatalogPage] = useState(0);
   const [isMobileCatalog, setIsMobileCatalog] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [toastVisible, setToastVisible] = useState(false);
+  const [toastAnimKey, setToastAnimKey] = useState(0);
+  const toastTimeoutRef = useRef<number | null>(null);
+  const { addItem } = useCart();
 
   const CATALOG_PAGE_SIZE = isMobileCatalog ? 1 : 3;
   const catalogPages: ProductCatalogItem[][] = [];
@@ -182,6 +62,30 @@ const App = () => {
       ((index % totalCatalogPages) + totalCatalogPages) % totalCatalogPages,
     );
   };
+
+  const handleAddToCart = (productId: string) => {
+    addItem(productId);
+    const product = PRODUCTS.find((item) => item.id === productId);
+    setToastMessage(product?.name ?? "Producto");
+    setToastAnimKey((current) => current + 1);
+    setToastVisible(true);
+
+    if (toastTimeoutRef.current !== null) {
+      window.clearTimeout(toastTimeoutRef.current);
+    }
+
+    toastTimeoutRef.current = window.setTimeout(() => {
+      setToastVisible(false);
+    }, 1800);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (toastTimeoutRef.current !== null) {
+        window.clearTimeout(toastTimeoutRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 767px)");
@@ -343,7 +247,7 @@ const App = () => {
                         {catalogPageItems.map((product, productIndex) => (
                           <article
                             key={`${product.id}-${pageIndex}-${productIndex}`}
-                            className="h-full min-h-[560px] md:min-h-[610px] w-full md:flex-none md:w-[calc((100%-3rem)/3)] rounded-3xl border border-gray-200 bg-white p-12  transition-shadow flex flex-col justify-between"
+                            className="h-full min-h-[560px] md:min-h-[650px] w-full md:flex-none md:w-[calc((100%-3rem)/3)] rounded-3xl border border-gray-200 bg-white p-12  transition-shadow flex flex-col justify-between"
                           >
                             <div className="flex-1">
                               <h3 className="text-xl md:text-2xl font-extrabold leading-tight text-black">
@@ -384,6 +288,14 @@ const App = () => {
                               >
                                 Ver más detalles
                               </a>
+
+                              <button
+                                type="button"
+                                onClick={() => handleAddToCart(product.id)}
+                                className="cursor-pointer mt-3 w-full rounded-2xl border border-black bg-white py-3 px-4 text-sm font-extrabold tracking-wide text-black hover:bg-gray-50 active:scale-[0.99] transition-all"
+                              >
+                                Agregar al carrito
+                              </button>
 
                               <button
                                 onClick={() =>
@@ -481,6 +393,14 @@ const App = () => {
                     >
                       Ver más detalles
                     </a>
+
+                    <button
+                      type="button"
+                      onClick={() => handleAddToCart(product.id)}
+                      className="cursor-pointer mt-3 w-full rounded-2xl border border-black bg-white py-3 px-4 text-sm font-extrabold tracking-wide text-black hover:bg-gray-50 active:scale-[0.99] transition-all"
+                    >
+                      Agregar al carrito
+                    </button>
 
                     <button
                       onClick={() =>
@@ -585,7 +505,7 @@ const App = () => {
                   pro3Product?.detailPrice ?? "$140.000 COP",
                 );
               }}
-              className="cursor-pointer w-full sm:w-auto bg-white text-black px-10 py-3 rounded-2xl border font-black text-lg hover:bg-neutral-200 active:bg-green-500 active:text-white transition-all transform hover:scale-105 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
+              className="cursor-pointer w-full sm:w-auto bg-white text-black px-10 py-3 rounded-2xl border font-black text-lg hover:bg-neutral-200 active:bg-green-500 active:text-white transition-all transform hover:scale-96 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
             >
               {pro3Product?.ctaLabel ?? "Comprar AirPods Pro 3"}
             </button>
@@ -723,7 +643,7 @@ const App = () => {
                     maxProduct?.detailPrice ?? "$150.000 COP",
                   );
                 }}
-                className="cursor-pointer w-full sm:w-auto bg-black text-white px-12 py-4 rounded-full font-bold hover:bg-neutral-800 active:bg-green-500 active:text-white transition-all text-lg shadow-2xl flex items-center gap-3 group transform hover:scale-105"
+                className="cursor-pointer w-full sm:w-auto bg-black text-white px-12 py-4 rounded-full font-bold hover:bg-neutral-800 active:bg-green-500 active:text-white transition-all text-lg shadow-2xl flex items-center gap-3 group transform hover:scale-96 rounded-xl"
               >
                 {maxProduct?.ctaLabel ?? "Comprar AirPods Max"}
                 <div className="bg-blue-600 rounded-full p-1 group-hover:rotate-12 transition-transform">
@@ -857,7 +777,7 @@ const App = () => {
                   pro2Product?.detailPrice ?? "$100.000 COP",
                 );
               }}
-              className="cursor-pointer mt-6 w-full sm:w-auto bg-white text-black px-10 py-3 rounded-2xl border font-black text-lg hover:bg-neutral-200 active:bg-green-500 active:text-white transition-all transform hover:scale-105 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
+              className="cursor-pointer mt-6 w-full sm:w-auto bg-white text-black px-10 py-3 rounded-2xl border font-black text-lg hover:bg-neutral-200 active:bg-green-500 active:text-white transition-all transform hover:scale-96 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
             >
               {pro2Product?.ctaLabel ?? "Comprar AirPods Pro 2"}
             </button>
@@ -924,7 +844,7 @@ const App = () => {
                   airpods4Product?.detailPrice ?? "$90.000 COP",
                 );
               }}
-              className="cursor-pointer mt-6 w-full sm:w-auto bg-black text-white px-10 py-3 rounded-2xl border border-black font-black text-lg hover:bg-neutral-800 transition-all shadow-lg transform hover:scale-105 active:bg-green-500 active:text-white"
+              className="cursor-pointer mt-6 w-full sm:w-auto bg-black text-white px-10 py-3 rounded-2xl border border-black font-black text-lg hover:bg-neutral-800 transition-all shadow-lg transform hover:scale-96 active:bg-green-500 active:text-white"
             >
               {airpods4Product?.ctaLabel ?? "Comprar AirPods Serie 4"}
             </button>
@@ -1051,7 +971,7 @@ const App = () => {
                     watchProduct?.detailPrice ?? "$165.000 COP",
                   );
                 }}
-                className="cursor-pointer mt-15 w-full bg-black text-white px-10 py-3 rounded-2xl border border-black font-black text-lg hover:bg-neutral-800 transition-all flex items-center justify-center transform hover:scale-105 active:bg-green-500 active:text-white"
+                className="cursor-pointer mt-15 w-full bg-black text-white px-10 py-3 rounded-2xl border border-black font-black text-lg hover:bg-neutral-800 transition-all flex items-center justify-center transform hover:scale-96 active:bg-green-500 active:text-white"
               >
                 {watchProduct?.ctaLabel ?? "Comprar Watch Serie 10"}
               </button>
@@ -1122,7 +1042,7 @@ const App = () => {
                       accessoriesProduct?.detailPrice ?? "Precio según referencia",
                     );
                   }}
-                  className="cursor-pointer mt-8 w-full sm:w-auto bg-white text-black px-10 py-3 rounded-2xl border font-black text-lg hover:bg-neutral-200 active:bg-green-500 active:text-white transition-all transform hover:scale-105 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
+                  className="cursor-pointer mt-8 w-full sm:w-auto bg-white text-black px-10 py-3 rounded-2xl border font-black text-lg hover:bg-neutral-200 active:bg-green-500 active:text-white transition-all transform hover:scale-96 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
                 >
                   {accessoriesProduct?.ctaLabel ?? "Cotizar Accesorios"}
                 </button>
@@ -1180,6 +1100,19 @@ const App = () => {
       </section>
 
       <SiteFooter />
+
+      <div
+        className={`pointer-events-none fixed bottom-4 right-4 z-[70] transition-all duration-300 md:bottom-6 md:right-6 ${toastVisible ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"}`}
+        aria-live="polite"
+      >
+        <div
+          key={toastAnimKey}
+          className="rounded-2xl border border-white/10 bg-black px-4 py-3 text-white shadow-2xl"
+        >
+          <p className="text-sm font-extrabold">Agregado al carrito</p>
+          <p className="text-xs text-gray-300">{toastMessage ?? " "}</p>
+        </div>
+      </div>
 
       {/* Styles for Custom Animations */}
       <style
