@@ -116,11 +116,9 @@ export const PRODUCTS: ProductCatalogItem[] = [
       "Cargadores y cables de alta calidad",
       "Cases premium para iPhone",
       "Compatibles con ecosistema Apple",
-      "Stock según referencia consultada",
       "Asesoría para elegir el accesorio ideal",
     ],
-    pitch:
-      "Cotiza el accesorio exacto que necesitas y recibe recomendación personalizada.",
+    pitch: "Cotiza el accesorio y recibe recomendación personalizada.",
     ctaLabel: "Cotizar Accesorios",
   },
 ];

@@ -3,6 +3,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import {
   ChevronRight,
   Menu,
@@ -41,12 +42,19 @@ export function SiteNavbar({ isHome = false }: SiteNavbarProps) {
   const [openMobileDropdown, setOpenMobileDropdown] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
   const { items, totalItems, subtotalLabel, removeItem, increaseQty, decreaseQty } =
     useCart();
 
   const sectionPrefix = isHome ? "" : "/";
 
   const navDropdowns: NavGroup[] = [
+    {
+      name: "Inicio",
+      id: "inicio",
+      href: "/",
+    },
     {
       name: "AirPods",
       id: "airpods",
@@ -110,6 +118,24 @@ export function SiteNavbar({ isHome = false }: SiteNavbarProps) {
     );
   };
 
+  const goToHomeTop = () => {
+    setIsMenuOpen(false);
+    setOpenMobileDropdown(null);
+    setIsCartOpen(false);
+
+    if (pathname !== "/") {
+      router.push("/");
+      return;
+    }
+
+    if (window.location.hash) {
+      const cleanUrl = `${window.location.pathname}${window.location.search}`;
+      window.history.replaceState(null, "", cleanUrl);
+    }
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   const renderNavItem = (item: NavItem, onClick?: () => void) => {
     if (isInternalRoute(item.href) && item.target !== "_blank") {
       return (
@@ -146,7 +172,7 @@ export function SiteNavbar({ isHome = false }: SiteNavbarProps) {
         {isHome ? (
           <div
             className="text-xl md:text-2xl font-bold tracking-tighter text-black flex items-center cursor-pointer select-none"
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            onClick={goToHomeTop}
             title="Ir al inicio"
           >
             <img
@@ -161,9 +187,10 @@ export function SiteNavbar({ isHome = false }: SiteNavbarProps) {
             </span>
           </div>
         ) : (
-          <Link
+          <button
+            type="button"
             className="text-xl md:text-2xl font-bold tracking-tighter text-black flex items-center cursor-pointer select-none"
-            href="/"
+            onClick={goToHomeTop}
             title="Ir al inicio"
           >
             <img
@@ -176,19 +203,30 @@ export function SiteNavbar({ isHome = false }: SiteNavbarProps) {
             <span className="bg-gradient-to-r from-gray-400 to-gray-600 bg-clip-text text-transparent ml-1">
               SANTORO
             </span>
-          </Link>
+          </button>
         )}
 
         <div className="hidden md:flex items-center space-x-8 text-sm font-medium">
           {navDropdowns.map((group) =>
             group.href ? (
-              <Link
-                key={group.name}
-                href={group.href}
-                className="hover:text-blue-600 transition-colors cursor-pointer"
-              >
-                {group.name}
-              </Link>
+              group.id === "inicio" ? (
+                <button
+                  key={group.name}
+                  type="button"
+                  onClick={goToHomeTop}
+                  className="hover:text-blue-600 transition-colors cursor-pointer"
+                >
+                  {group.name}
+                </button>
+              ) : (
+                <Link
+                  key={group.name}
+                  href={group.href}
+                  className="hover:text-blue-600 transition-colors cursor-pointer"
+                >
+                  {group.name}
+                </Link>
+              )
             ) : (
               <div
                 key={group.name}
@@ -440,16 +478,26 @@ export function SiteNavbar({ isHome = false }: SiteNavbarProps) {
             {navDropdowns.map((group) => (
               <div key={group.name} className="border-b border-gray-50 pb-2">
                 {group.href ? (
-                  <Link
-                    href={group.href}
-                    onClick={() => {
-                      setIsMenuOpen(false);
-                      setOpenMobileDropdown(null);
-                    }}
-                    className="w-full flex items-center justify-between text-lg font-medium py-1"
-                  >
-                    {group.name}
-                  </Link>
+                  group.id === "inicio" ? (
+                    <button
+                      type="button"
+                      onClick={goToHomeTop}
+                      className="w-full flex items-center justify-between text-lg font-medium py-1"
+                    >
+                      {group.name}
+                    </button>
+                  ) : (
+                    <Link
+                      href={group.href}
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        setOpenMobileDropdown(null);
+                      }}
+                      className="w-full flex items-center justify-between text-lg font-medium py-1"
+                    >
+                      {group.name}
+                    </Link>
+                  )
                 ) : (
                   <>
                     <button

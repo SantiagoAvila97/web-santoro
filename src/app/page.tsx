@@ -216,7 +216,7 @@ const App = () => {
         />
       </div>
 
-      <section className="relative py-14 md:py-20 px-4 bg-gradient-to-b from-[#f5f5f7] to-white">
+      <section className="relative py-14 md:py-20 px-4 bg-gradient-to-b from-[#f5f5f7] to-white md:px-10">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-8 md:mb-12">
             <span className="inline-flex items-center gap-2 rounded-full bg-black text-white px-4 py-2 text-xs md:text-sm font-bold tracking-wider uppercase">
@@ -247,7 +247,7 @@ const App = () => {
                         {catalogPageItems.map((product, productIndex) => (
                           <article
                             key={`${product.id}-${pageIndex}-${productIndex}`}
-                            className="h-full min-h-[560px] md:min-h-[650px] w-full md:flex-none md:w-[calc((100%-3rem)/3)] rounded-3xl border border-gray-200 bg-white p-12  transition-shadow flex flex-col justify-between"
+                            className="h-full min-h-[630px] md:min-h-[750px] w-full md:flex-none md:w-[calc((100%-3rem)/3)] rounded-3xl border border-gray-200 bg-white p-12  transition-shadow flex flex-col justify-between"
                           >
                             <div className="flex-1">
                               <h3 className="text-xl md:text-2xl font-extrabold leading-tight text-black">
@@ -421,7 +421,7 @@ const App = () => {
       {/* NUEVA SECCIÓN: AirPods Pro 3 (EXCLUSIVOS) */}
       <section
         id="airpods-pro-3"
-        className="py-12 md:py-20 bg-black text-white overflow-hidden"
+        className="py-12 md:py-20 bg-black text-white overflow-hidden md:px-10"
       >
         <div className="max-w-[90rem] mx-auto px-4 sm:px-6 flex flex-col md:flex-row items-center gap-8 md:gap-14">
           <div className="w-full md:flex-1">
@@ -516,7 +516,7 @@ const App = () => {
       {/* NUEVA SECCIÓN: Diademas Magnético Pro Max */}
       <section
         id="airpods-max"
-        className="py-12 md:py-20 bg-gray-50 overflow-hidden"
+        className="py-12 md:py-20 bg-gray-50 overflow-hidden md:px-10"
       >
         <div className="max-w-[90rem] mx-auto px-4 sm:px-6">
           <div className="text-center mb-0">
@@ -707,7 +707,7 @@ const App = () => {
       {/* Product Highlight: AirPods Pro 2 */}
       <section
         id="airpods-pro"
-        className="py-10 md:py-15 bg-[#000] text-white overflow-hidden"
+        className="py-10 md:py-15 bg-[#000] text-white overflow-hidden md:px-10"
       >
         <div className="max-w-[90rem] mx-auto px-4 sm:px-6 flex flex-col md:flex-row items-center gap-8 md:gap-12">
           <div className="w-full md:flex-1 order-2 md:order-1">
@@ -788,7 +788,7 @@ const App = () => {
       {/* AirPods 4 */}
       <section
         id="airpods-4"
-        className="py-12 md:py-20 bg-white overflow-hidden border-b border-gray-100"
+        className="py-12 md:py-20 md:px-10 bg-white overflow-hidden border-b border-gray-100"
       >
         <div className="max-w-[90rem] mx-auto px-4 sm:px-6 flex flex-col md:flex-row-reverse items-center gap-8 md:gap-12">
           <div className="w-full md:flex-1">
@@ -925,7 +925,7 @@ const App = () => {
       {/* NEW SECTION: Apple Watch Series 10 */}
       <section
         id="watch-10"
-        className="py-12 md:py-0 bg-gradient-to-b from-[#f5f5f7] to-white overflow-hiddenpd-200 mt-20"
+        className="py-12 md:py-0 bg-gradient-to-b from-[#f5f5f7] to-white overflow-hiddenpd-200 mt-20 md:px-10"
       >
         <div className="max-w-[90rem] mx-auto px-4 sm:px-6">
           <div className="text-center mb-5 md:mb-6">
@@ -1007,7 +1007,7 @@ const App = () => {
       </section>
 
       {/* Essentials (Bento Grid) */}
-      <section id="accesorios" className="py-12 md:py-20 bg-white">
+      <section id="accesorios" className="py-12 md:py-20 bg-white md:px-10">
         <div className="max-w-[90rem] mx-auto px-4 sm:px-6">
           <div className="mb-10 md:mb-12 text-center md:text-left">
             <span className="inline-block px-4 py-1 rounded-full border border-blue-500 text-blue-600 font-bold text-xs md:text-sm tracking-widest uppercase mb-2">
