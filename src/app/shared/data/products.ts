@@ -16,8 +16,8 @@ export const PRODUCTS: ProductCatalogItem[] = [
     id: "catalog-airpods-pro-3",
     anchorId: "airpods-pro-3",
     name: "✨ AirPods Pro 3",
-    price: "💰 $145.000",
-    detailPrice: "$145.000 COP",
+    price: "💰 $155.000",
+    detailPrice: "$155.000 COP",
     whatsappName: "AirPods Pro 3",
     delivery: "📍 Entrega hoy mismo en Bogotá y pago contra entrega",
     benefits: [
@@ -35,8 +35,8 @@ export const PRODUCTS: ProductCatalogItem[] = [
     id: "catalog-airpods-max",
     anchorId: "airpods-max",
     name: "🎵 AirPods Max",
-    price: "💰 $155.000",
-    detailPrice: "$155.000 COP",
+    price: "💰 $165.000",
+    detailPrice: "$165.000 COP",
     whatsappName: "AirPods Max",
     delivery: "📍 Entrega inmediata y pago contra entrega",
     benefits: [
@@ -53,8 +53,8 @@ export const PRODUCTS: ProductCatalogItem[] = [
     id: "catalog-airpods-4-a",
     anchorId: "airpods-4",
     name: "🚀 AirPods Serie 4",
-    price: "💰 $95.000",
-    detailPrice: "$95.000 COP",
+    price: "💰 $110.000",
+    detailPrice: "$110.000 COP",
     whatsappName: "AirPods Serie 4",
     delivery: "📍 Envío express y pago contra entrega",
     benefits: [
@@ -71,8 +71,8 @@ export const PRODUCTS: ProductCatalogItem[] = [
     id: "catalog-airpods-pro-2",
     anchorId: "airpods-pro",
     name: "🎧 AirPods Pro 2",
-    price: "💰 $85.000",
-    detailPrice: "$85.000 COP",
+    price: "💰 $100.000",
+    detailPrice: "$100.000 COP",
     whatsappName: "AirPods Pro 2",
     delivery: "📍 Entrega inmediata y pago contra entrega",
     benefits: [
@@ -90,7 +90,7 @@ export const PRODUCTS: ProductCatalogItem[] = [
     anchorId: "watch-10",
     name: "⌚ Apple Watch Serie 10",
     price: "💰 $165.000",
-    detailPrice: "$165.000",
+    detailPrice: "$165.000 COP",
     whatsappName: "Apple Watch Serie 10",
     delivery: "📍 Entrega inmediata y pago contra entrega",
     benefits: [
